@@ -2,9 +2,7 @@
 						
 ## Grupo 2
 
-		
-1	BERNARDO. MAXIMILIANO JOSE	41912800	BETWEEN / TAKE	Polaca Inversa	Lunes	C
- | Apellido | Dni | GCI | Comisión | Lenguaje |
+| Apellido | Dni | GCI | Comisión | Lenguaje |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | `CORREA`  | 40653000  | BETWEEN / TAKE | Polaca Inversa | C |
 | `NIEVA`  | 32361608  | BETWEEN / TAKE | Polaca Inversa | C |
