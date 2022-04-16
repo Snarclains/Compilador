@@ -2,11 +2,11 @@
 						
 ## Grupo 2
 
-| Apellido | Dni | GCI | Comisión | Lenguaje |
+| Apellido | Dni | GCI | Temas Especiales | Lenguaje |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| `CORREA`  | 40653000  | BETWEEN / TAKE | Polaca Inversa | C |
-| `NIEVA`  | 32361608  | BETWEEN / TAKE | Polaca Inversa | C |
-| `REY`  | 36921336  | BETWEEN / TAKE | Polaca Inversa | C |
+| `CORREA`  | 40653000  | Tercetos | AVG / INLIST | C |
+| `NIEVA`  | 32361608  | Tercetos | AVG / INLIST | C |
+| `REY`  | 36921336  | Tercetos | AVG / INLIST | C |
 
 
 Construido con 🛠️
