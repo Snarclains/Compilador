@@ -78,6 +78,8 @@ CHAR		"char"|"CHAR"|"Char"
 FOR			"for"|"FOR"|"For"
 WRITE		"write"|"WRITE"|"Write"
 READ		"read"|"READ"|"Read"
+AVG			"avg"|"AVG"|"Avg"
+INLIST		"inlist"|"INLIST"|"Inlist"
 
 %%
 
@@ -122,6 +124,8 @@ CHAR_DOSPU		{printf("\nDos puntos: %s\n", yytext); return CHAR_DOSPU;}
 				printf("\nIdentificador: %s\n", yytext);return ID;
 			}
 
+{OP_AVG}		{printf("\nAVG: %s\n", yytext); return OP_AVG;}
+{OP_INLIST}		{printf("\nINLIST: %s\n", yytext); return OP_INLIST;}
 {OP_SUM}		{printf("\nSuma: %s\n", yytext); return OP_SUM;}
 {OP_ASIG}		{printf("\nAsignacion: %s\n", yytext); return OP_AS;}
 {OP_MUL}		{printf("\nMultiplicacion: %s\n", yytext); return OP_MUL;}
@@ -134,7 +138,7 @@ CHAR_DOSPU		{printf("\nDos puntos: %s\n", yytext); return CHAR_DOSPU;}
 {OP_IGU}		{printf("\nIguales: %s\n", yytext); return OP_IGU;}
 {OP_NEG}		{printf("\nNegacion: %s\n", yytext); return OP_NEG;}
 {OP_DIS}		{printf("\nDistinto: %s\n", yytext); return OP_DIS;}
-{OP_DOPU}		{printf("\nDos puntos: %s\n", yytext); return OP_DOPU;}
+{OP_DOPU}		{printf("\nDos puntos: %s\n", yytext); return OP_DOPU;} // Consultar sobre este operador
 
 {PAR_A}			{printf("\nParentesis abre: %s\n", yytext); return PAR_A;}
 {PAR_C}			{printf("\nParentesis cierra: %s\n", yytext); return PAR_C;}
