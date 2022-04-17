@@ -31,10 +31,12 @@ _Below is an example of how you can instruct your audience on installing and set
    git clone https://github.com/JuanCruzMonteros/Compilador.git
    ```
 2. Ejecutar el archivo (en caso de tener powershell)
-   ```run.sh
+   ```sh
+   run.sh
    ```
 2. Ejecutar el archivo (en caso de no tener powershell)
-   ```run.bat
+   ```cmd  
+	run.bat
    ```
 2. Ejecu
 
