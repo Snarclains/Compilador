@@ -16,7 +16,7 @@ Construido con 🛠️
 
 https://www.youtube.com/watch?v=_vIGlG09mn8
 
-### Prerequisitos
+### Pre requisitos
 
 Debes instalar lo siguiente
 * [Bison](https://www.gnu.org/software/bison/) - Bison es un generador de parser de propósito general que convierte una gramática libre de contexto anotada en una determinista
