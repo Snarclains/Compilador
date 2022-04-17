@@ -38,6 +38,5 @@ _Below is an example of how you can instruct your audience on installing and set
    ```cmd  
 	run.bat
    ```
-2. Ejecu
 
 <p align="right">(<a href="#top">back to top</a>)</p>
