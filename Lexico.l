@@ -124,8 +124,6 @@ CHAR_DOSPU		{printf("\nDos puntos: %s\n", yytext); return CHAR_DOSPU;}
 				printf("\nIdentificador: %s\n", yytext);return ID;
 			}
 
-{OP_AVG}		{printf("\nAVG: %s\n", yytext); return OP_AVG;}
-{OP_INLIST}		{printf("\nINLIST: %s\n", yytext); return OP_INLIST;}
 {OP_SUM}		{printf("\nSuma: %s\n", yytext); return OP_SUM;}
 {OP_ASIG}		{printf("\nAsignacion: %s\n", yytext); return OP_AS;}
 {OP_MUL}		{printf("\nMultiplicacion: %s\n", yytext); return OP_MUL;}
@@ -154,6 +152,8 @@ CHAR_DOSPU		{printf("\nDos puntos: %s\n", yytext); return CHAR_DOSPU;}
 {FOR}			{printf("\nPalabra reservada FOR: %s\n", yytext); return FOR;}
 {WRITE}			{printf("\nPalabra reservada WRITE: %s\n", yytext); return WRITE;}
 {READ}			{printf("\nPalabra reservada READ: %s\n", yytext); return READ;}
+{AVG}			{printf("\nAVG: %s\n", yytext); return OP_AVG;}
+{INLIST}		{printf("\nINLIST: %s\n", yytext); return OP_INLIST;}
 
 "\n"      		
 "\t"
