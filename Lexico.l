@@ -152,7 +152,7 @@ CHAR_DOSPU		{printf("\nDos puntos: %s\n", yytext); return CHAR_DOSPU;}
 {FOR}			{printf("\nPalabra reservada FOR: %s\n", yytext); return FOR;}
 {WRITE}			{printf("\nPalabra reservada WRITE: %s\n", yytext); return WRITE;}
 {READ}			{printf("\nPalabra reservada READ: %s\n", yytext); return READ;}
-{AVG}		{printf("\nAVG: %s\n", yytext); return OP_AVG;}
+{AVG}			{printf("\nAVG: %s\n", yytext); return OP_AVG;}
 {INLIST}		{printf("\nINLIST: %s\n", yytext); return OP_INLIST;}
 
 "\n"      		
