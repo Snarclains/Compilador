@@ -1,10 +1,13 @@
 %{
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
+#include <math.h>
 
 #include "y.tab.h"
+
 FILE  *yyin;
 int yylval;
 char *yyltext;
@@ -13,13 +16,10 @@ int yyerror(void);
 
 #define LIMIT_ID 32
 #define LIMIT_STR 30
-
-
 #define LIMIT_INT_INF -32768
 #define LIMIT_INT_SUP 32767
 #define LIMIT_FLOAT_INF pow(-1.17549,-38)
 #define LIMIT_FLOAT_SUP pow(3.40282,38)
-
 
 %}
 
@@ -27,7 +27,7 @@ int yyerror(void);
 %option noyywrap  
 %option yylineno 
 
-/*TOKENS*/
+/*CARACTERES*/
 DIGITO			[1-9]
 DIG_C_NUL		[0-9]		
 LETRA			[a-zA-Z]
@@ -39,7 +39,6 @@ CHAR_COMA		[","]
 CHAR_PUNTO		["."]
 CHAR_PUNCO		[";"]
 CHAR_DOSPU		[":"]
-
 
 /*DECLARACIONES*/
 CTE_INT	    -?{DIGITO}{DIG_C_NUL}|0
@@ -83,49 +82,37 @@ INLIST		"inlist"|"INLIST"|"Inlist"
 
 %%
 
-CHAR_COMA		{printf("\nComa: %s\n", yytext); return CHAR_COMA;}
-CHAR_PUNTO		{printf("\nPunto: %s\n", yytext); return CHAR_PUNTO;}
-CHAR_PUNCO		{printf("\nPunto y coma: %s\n", yytext); return CHAR_PUNCO;}
-CHAR_DOSPU		{printf("\nDos puntos: %s\n", yytext); return CHAR_DOSPU;}
+{CHAR_COMA}			{printf("\nComa: %s\n", yytext); return CHAR_COMA;}
+{CHAR_PUNTO}		{printf("\nPunto: %s\n", yytext); return CHAR_PUNTO;}
+{CHAR_PUNCO}		{printf("\nPunto y coma: %s\n", yytext); return CHAR_PUNCO;}
+{CHAR_DOSPU}		{printf("\nDos puntos: %s\n", yytext); return CHAR_DOSPU;}
 
-{CTE_INT}		{	
-				if (atof(yytext) > LIMIT_INT_SUP || atof(yytext) < LIMIT_INT_INF) 
-				{
-                        	printf( "El entero supera los limites permitidos.\n");
-                        	exit(1);
-                    		} 
-				printf("\nConstante entera: %s\n", yytext); return CTE_INT;
-			}
+{CTE_INT}		{if (atof(yytext) > LIMIT_INT_SUP || atof(yytext) < LIMIT_INT_INF){
+                        printf( "El entero supera los limites permitidos.\n");
+                        exit(1);
+					} 
+				printf("\nConstante entera: %s\n", yytext); return CTE_INT;}
 
-{CTE_FLO}		{	
-				if (atof(yytext) > LIMIT_FLOAT_SUP || atof(yytext) < LIMIT_FLOAT_INF) 
-				{
-                        	printf( "El real supera los limites permitidos. \n");
-                        	exit(1);
-                    		}  
-				printf("\nConstante flotante: %s\n", yytext); return CTE_FLO;
-			}
+{CTE_FLO}		{if (atof(yytext) > LIMIT_FLOAT_SUP || atof(yytext) < LIMIT_FLOAT_INF){
+                        printf( "El real supera los limites permitidos. \n");
+                        exit(1);
+					}  
+				printf("\nConstante flotante: %s\n", yytext); return CTE_FLO;}
 
-{CTE_CHA}		{
-				if (strlen(yytext) > LIMIT_STR) 
-				{
-                        	printf( "El string ingresado supera la cantidad maxima permitida. Cantidad: %d\n", LIMIT_STR);
-                        	exit(1); 
-				}
-				printf("\nConstante char: %s\n", yytext); return CTE_CHA;
-			}
+{CTE_CHA}		{if (strlen(yytext) > LIMIT_STR){
+                        printf( "El string ingresado supera la cantidad maxima permitida. Cantidad: %d\n", LIMIT_STR);
+                       	exit(1); 
+					}
+				printf("\nConstante char: %s\n", yytext); return CTE_CHA;}
 
-{ID}			{	
-				if (strlen(yytext) > LIMIT_ID) 
-				{
-                        	printf( "El nombre del identificador supera la cantidad maxima de caracters permitidos. Cantidad: %d\n", LIMIT_ID);
-                       	 	exit(1);
-                    		}
-				printf("\nIdentificador: %s\n", yytext);return ID;
-			}
+{ID}			{if (strlen(yytext) > LIMIT_ID){
+                        printf( "El nombre del identificador supera la cantidad maxima de caracters permitidos. Cantidad: %d\n", LIMIT_ID);
+                       	exit(1);
+                    }
+				printf("\nIdentificador: %s\n", yytext);return ID;}
 
 {OP_SUM}		{printf("\nSuma: %s\n", yytext); return OP_SUM;}
-{OP_ASIG}		{printf("\nAsignacion: %s\n", yytext); return OP_AS;}
+{OP_ASIG}		{printf("\nAsignacion: %s\n", yytext); return OP_ASIG;}
 {OP_MUL}		{printf("\nMultiplicacion: %s\n", yytext); return OP_MUL;}
 {OP_RES}		{printf("\nResta: %s\n", yytext); return OP_RES;}
 {OP_DIV}		{printf("\nDivision: %s\n", yytext); return OP_DIV;}
@@ -152,8 +139,8 @@ CHAR_DOSPU		{printf("\nDos puntos: %s\n", yytext); return CHAR_DOSPU;}
 {FOR}			{printf("\nPalabra reservada FOR: %s\n", yytext); return FOR;}
 {WRITE}			{printf("\nPalabra reservada WRITE: %s\n", yytext); return WRITE;}
 {READ}			{printf("\nPalabra reservada READ: %s\n", yytext); return READ;}
-{AVG}			{printf("\nAVG: %s\n", yytext); return OP_AVG;}
-{INLIST}		{printf("\nINLIST: %s\n", yytext); return OP_INLIST;}
+{AVG}			{printf("\nAVG: %s\n", yytext); return AVG;}
+{INLIST}		{printf("\nINLIST: %s\n", yytext); return INLIST;}
 
 "\n"      		
 "\t"
@@ -175,7 +162,7 @@ int main (int argc, char *argv[]){
 	printf("\nEl archivo %s se abrio correctamente\n", argv[1]);
 	yylex();
 
-	printf("\nFLEZ finalizo la lectura del archivo %s \n", argv[1]);
+	printf("\nFLEX finalizo la lectura del archivo %s \n", argv[1]);
 	fclose(yyin);
 
 	return 0;
