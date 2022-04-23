@@ -13,22 +13,68 @@ FILE  *yyin;
 
 %}
 
-%token CTE
+/*CARACTERES*/
+%token DIGITO
+%token DIG_C_NUL	
+%token LETRA
+%token ESPACIO
+%token INI_COM
+%token FIN_COM
+%token GUIONES
+%token CHAR_COMA
+%token CHAR_PUNTO
+%token CHAR_PUNCO
+%token CHAR_DOSPU
+
+/*DECLARACIONES*/
+%token CTE_INT
+%token CTE_FLO
+%token CTE_CHA
 %token ID
-%token OP_AS
+
+/*OPERADORES*/
+%token OP_ASIG
 %token OP_SUM
 %token OP_MUL
 %token OP_RES
 %token OP_DIV
-%token PA
-%token PC
+%token OP_MAY
+%token OP_MEN
+%token OP_MAIG
+%token OP_MEIG
+%token OP_IGU
+%token OP_NEG
+%token OP_DIS
+%token OP_DOPU
+
+/*OTROS CARACTERES*/
+%token LLA_A
+%token LLA_C
+%token PAR_A
+%token PAR_C
+%token FIN_SEN
+
+/*PALABRAS RESERVADAS*/
+%token IF
+%token WHILE
+%token INT
+%token FLOAT
+%token CHAR
+%token FOR
+%token WRITE
+%token READ
+%token AVG
+%token INLIST
 
 %%
+
+/*REGLAS (REVISAR!)*/
+
 sentencia:  	   
 	asignacion {printf(" FIN\n");} ;
 
 asignacion: 
-          ID OP_AS expresion {printf("    ID = Expresion es ASIGNACION\n");}
+          ID OP_ASIG expresion {printf("    ID = Expresion es ASIGNACION\n");}
 	  ;
 
 expresion:
@@ -45,8 +91,8 @@ termino:
 
 factor: 
       ID {printf("    ID es Factor \n");}
-      | CTE {printf("    CTE es Factor\n");}
-	| PA expresion PC {printf("    Expresion entre parentesis es Factor\n");}
+      | CTE_INT {printf("    CTE_INT es Factor\n");}
+	| PAR_A expresion PAR_C {printf("    Expresion entre parentesis es Factor\n");}
      	;
 %%
 
