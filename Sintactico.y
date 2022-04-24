@@ -139,8 +139,12 @@ comparador: OP_MAIG
 /* <expresion> -> <expresion> + <termino> | <expresion> - <termino> | <termino>*/
 expresion:  expresion OP_SUM termino {printf("SUMA\n");}
             | expresion OP_RES termino {printf("RESTA\n");}
+            | expresion_AVG {printf("AVG\n");}
             | termino;
-            
+
+expresion_AVG: AVG PAR_A lista_elementos PAR_C ;
+lista_elementos: termino CHAR_COMA lista_elementos;
+lista_elementos: expresion;
 
 /* <termino> -> <termino> * <factor> | <termino> / <factor> | <factor>*/
 termino:  termino OP_MUL factor {printf("MULTIPLICACION\n");}

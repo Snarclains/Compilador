@@ -1,30 +1,18 @@
-/*
-			GRUPO: 2
 
-			ALUMNOS:	
-			CORREA, JUAN PABLO  40653000
-			NIEVA, MAURO NICOLAS    32361608
-			REY, JUAN CRUZ  36921336
-
-			PROFESOR ASIGNADO: 
-				[Agregar al saberlo]
+int a
+int b=0
+float c
+char cadena
 
 
-			TEMAS ASIGNADOS: AVG Y INLIST
+a=1
+c=1.2
 
-*/
+if(a==b)
+{
+ a=2
+}
 
-/* ESTO /* ES /* UN /* COMENTARIO /* ANIDADO */
-
-/* Declaración de variables */
-
-Int a = 10;
-/* a = 1000000000000;
-(cota: ERROR: Entero fuera del rango Permitido [-32768; 32767] */
-
-FLOAT b = 10;
-/* b = pow(-1.17549,-40);
-(cota: ERROR: Entero fuera del rango flotante permitido [pow(-1.17549,-38); pow(3.40282,38)] */
-
-
+a = AVG(a,b)
+b = AVG( 1, b, 2, c)
 
