@@ -1,0 +1,947 @@
+Terminals unused in grammar
+
+   DIGITO
+   DIG_C_NUL
+   LETRA
+   ESPACIO
+   INI_COM
+   FIN_COM
+   GUIONES
+   CHAR_COMA
+   CHAR_PUNTO
+   CHAR_PUNCO
+   CHAR_DOSPU
+   CONTENIDO
+   COMENTARIO
+   OP_NEG
+   OP_DIS
+   OP_DOPU
+   FIN_SEN
+   FOR
+   WRITE
+   READ
+   AVG
+   INLIST
+
+
+Gramática
+
+    0 $accept: programacompleto $end
+
+    1 programacompleto: programa
+
+    2 programa: sentencia
+    3         | programa sentencia
+
+    4 sentencia: asignacion
+    5          | iteracion
+    6          | seleccion
+    7          | definicion
+
+    8 asignacion: ID OP_ASIG expresion
+
+    9 seleccion: IF PAR_A condicion PAR_C LLA_A programa LLA_C
+   10          | IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C
+
+   11 definicion: tipo ID
+   12           | tipo asignacion
+
+   13 tipo: INT
+   14     | FLOAT
+   15     | CHAR
+
+   16 iteracion: WHILE PAR_A condicion PAR_C LLA_A programa LLA_C
+
+   17 condicion: comparacion
+   18          | condicion OP_AND comparacion
+   19          | condicion OP_OR comparacion
+   20          | PAR_A comparacion PAR_C
+
+   21 comparacion: expresion comparador expresion
+
+   22 comparador: OP_MAIG
+   23           | OP_MEIG
+   24           | OP_MEN
+   25           | OP_MAY
+   26           | OP_IGU
+
+   27 expresion: expresion OP_SUM termino
+   28          | expresion OP_RES termino
+   29          | termino
+
+   30 termino: termino OP_MUL factor
+   31        | termino OP_DIV factor
+   32        | factor
+
+   33 factor: PAR_A expresion PAR_C
+   34       | ID
+   35       | CTE_CHA
+   36       | CTE_FLO
+   37       | CTE_INT
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+error (256)
+OP_RES (258) 28
+OP_SUM (259) 27
+OP_DIV (260) 31
+OP_MUL (261) 30
+OP_ASIG (262) 8
+DIGITO (263)
+DIG_C_NUL (264)
+LETRA (265)
+ESPACIO (266)
+INI_COM (267)
+FIN_COM (268)
+GUIONES (269)
+CHAR_COMA (270)
+CHAR_PUNTO (271)
+CHAR_PUNCO (272)
+CHAR_DOSPU (273)
+CTE_INT (274) 37
+CTE_FLO (275) 36
+CTE_CHA (276) 35
+ID (277) 8 11 34
+CONTENIDO (278)
+COMENTARIO (279)
+OP_MAY (280) 25
+OP_MEN (281) 24
+OP_MAIG (282) 22
+OP_MEIG (283) 23
+OP_IGU (284) 26
+OP_NEG (285)
+OP_DIS (286)
+OP_DOPU (287)
+OP_AND (288) 18
+OP_OR (289) 19
+LLA_A (290) 9 10 16
+LLA_C (291) 9 10 16
+PAR_A (292) 9 10 16 20 33
+PAR_C (293) 9 10 16 20 33
+FIN_SEN (294)
+IF (295) 9 10
+ELSE (296) 10
+WHILE (297) 16
+INT (298) 13
+FLOAT (299) 14
+CHAR (300) 15
+FOR (301)
+WRITE (302)
+READ (303)
+AVG (304)
+INLIST (305)
+
+
+No terminales con las reglas donde aparecen
+
+$accept (51)
+    en la izquierda: 0
+programacompleto (52)
+    en la izquierda: 1, en la derecha: 0
+programa (53)
+    en la izquierda: 2 3, en la derecha: 1 3 9 10 16
+sentencia (54)
+    en la izquierda: 4 5 6 7, en la derecha: 2 3
+asignacion (55)
+    en la izquierda: 8, en la derecha: 4 12
+seleccion (56)
+    en la izquierda: 9 10, en la derecha: 6
+definicion (57)
+    en la izquierda: 11 12, en la derecha: 7
+tipo (58)
+    en la izquierda: 13 14 15, en la derecha: 11 12
+iteracion (59)
+    en la izquierda: 16, en la derecha: 5
+condicion (60)
+    en la izquierda: 17 18 19 20, en la derecha: 9 10 16 18 19
+comparacion (61)
+    en la izquierda: 21, en la derecha: 17 18 19 20
+comparador (62)
+    en la izquierda: 22 23 24 25 26, en la derecha: 21
+expresion (63)
+    en la izquierda: 27 28 29, en la derecha: 8 21 27 28 33
+termino (64)
+    en la izquierda: 30 31 32, en la derecha: 27 28 29 30 31
+factor (65)
+    en la izquierda: 33 34 35 36 37, en la derecha: 30 31 32
+
+
+estado 0
+
+    0 $accept: . programacompleto $end
+
+    ID     desplazar e ir al estado 1
+    IF     desplazar e ir al estado 2
+    WHILE  desplazar e ir al estado 3
+    INT    desplazar e ir al estado 4
+    FLOAT  desplazar e ir al estado 5
+    CHAR   desplazar e ir al estado 6
+
+    programacompleto  ir al estado 7
+    programa          ir al estado 8
+    sentencia         ir al estado 9
+    asignacion        ir al estado 10
+    seleccion         ir al estado 11
+    definicion        ir al estado 12
+    tipo              ir al estado 13
+    iteracion         ir al estado 14
+
+
+estado 1
+
+    8 asignacion: ID . OP_ASIG expresion
+
+    OP_ASIG  desplazar e ir al estado 15
+
+
+estado 2
+
+    9 seleccion: IF . PAR_A condicion PAR_C LLA_A programa LLA_C
+   10          | IF . PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C
+
+    PAR_A  desplazar e ir al estado 16
+
+
+estado 3
+
+   16 iteracion: WHILE . PAR_A condicion PAR_C LLA_A programa LLA_C
+
+    PAR_A  desplazar e ir al estado 17
+
+
+estado 4
+
+   13 tipo: INT .
+
+    $default  reduce usando la regla 13 (tipo)
+
+
+estado 5
+
+   14 tipo: FLOAT .
+
+    $default  reduce usando la regla 14 (tipo)
+
+
+estado 6
+
+   15 tipo: CHAR .
+
+    $default  reduce usando la regla 15 (tipo)
+
+
+estado 7
+
+    0 $accept: programacompleto . $end
+
+    $end  desplazar e ir al estado 18
+
+
+estado 8
+
+    1 programacompleto: programa .
+    3 programa: programa . sentencia
+
+    ID     desplazar e ir al estado 1
+    IF     desplazar e ir al estado 2
+    WHILE  desplazar e ir al estado 3
+    INT    desplazar e ir al estado 4
+    FLOAT  desplazar e ir al estado 5
+    CHAR   desplazar e ir al estado 6
+
+    $default  reduce usando la regla 1 (programacompleto)
+
+    sentencia   ir al estado 19
+    asignacion  ir al estado 10
+    seleccion   ir al estado 11
+    definicion  ir al estado 12
+    tipo        ir al estado 13
+    iteracion   ir al estado 14
+
+
+estado 9
+
+    2 programa: sentencia .
+
+    $default  reduce usando la regla 2 (programa)
+
+
+estado 10
+
+    4 sentencia: asignacion .
+
+    $default  reduce usando la regla 4 (sentencia)
+
+
+estado 11
+
+    6 sentencia: seleccion .
+
+    $default  reduce usando la regla 6 (sentencia)
+
+
+estado 12
+
+    7 sentencia: definicion .
+
+    $default  reduce usando la regla 7 (sentencia)
+
+
+estado 13
+
+   11 definicion: tipo . ID
+   12           | tipo . asignacion
+
+    ID  desplazar e ir al estado 20
+
+    asignacion  ir al estado 21
+
+
+estado 14
+
+    5 sentencia: iteracion .
+
+    $default  reduce usando la regla 5 (sentencia)
+
+
+estado 15
+
+    8 asignacion: ID OP_ASIG . expresion
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    expresion  ir al estado 27
+    termino    ir al estado 28
+    factor     ir al estado 29
+
+
+estado 16
+
+    9 seleccion: IF PAR_A . condicion PAR_C LLA_A programa LLA_C
+   10          | IF PAR_A . condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 30
+
+    condicion    ir al estado 31
+    comparacion  ir al estado 32
+    expresion    ir al estado 33
+    termino      ir al estado 28
+    factor       ir al estado 29
+
+
+estado 17
+
+   16 iteracion: WHILE PAR_A . condicion PAR_C LLA_A programa LLA_C
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 30
+
+    condicion    ir al estado 34
+    comparacion  ir al estado 32
+    expresion    ir al estado 33
+    termino      ir al estado 28
+    factor       ir al estado 29
+
+
+estado 18
+
+    0 $accept: programacompleto $end .
+
+    $default  aceptar
+
+
+estado 19
+
+    3 programa: programa sentencia .
+
+    $default  reduce usando la regla 3 (programa)
+
+
+estado 20
+
+    8 asignacion: ID . OP_ASIG expresion
+   11 definicion: tipo ID .
+
+    OP_ASIG  desplazar e ir al estado 15
+
+    $default  reduce usando la regla 11 (definicion)
+
+
+estado 21
+
+   12 definicion: tipo asignacion .
+
+    $default  reduce usando la regla 12 (definicion)
+
+
+estado 22
+
+   37 factor: CTE_INT .
+
+    $default  reduce usando la regla 37 (factor)
+
+
+estado 23
+
+   36 factor: CTE_FLO .
+
+    $default  reduce usando la regla 36 (factor)
+
+
+estado 24
+
+   35 factor: CTE_CHA .
+
+    $default  reduce usando la regla 35 (factor)
+
+
+estado 25
+
+   34 factor: ID .
+
+    $default  reduce usando la regla 34 (factor)
+
+
+estado 26
+
+   33 factor: PAR_A . expresion PAR_C
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    expresion  ir al estado 35
+    termino    ir al estado 28
+    factor     ir al estado 29
+
+
+estado 27
+
+    8 asignacion: ID OP_ASIG expresion .
+   27 expresion: expresion . OP_SUM termino
+   28          | expresion . OP_RES termino
+
+    OP_RES  desplazar e ir al estado 36
+    OP_SUM  desplazar e ir al estado 37
+
+    $default  reduce usando la regla 8 (asignacion)
+
+
+estado 28
+
+   29 expresion: termino .
+   30 termino: termino . OP_MUL factor
+   31        | termino . OP_DIV factor
+
+    OP_DIV  desplazar e ir al estado 38
+    OP_MUL  desplazar e ir al estado 39
+
+    $default  reduce usando la regla 29 (expresion)
+
+
+estado 29
+
+   32 termino: factor .
+
+    $default  reduce usando la regla 32 (termino)
+
+
+estado 30
+
+   20 condicion: PAR_A . comparacion PAR_C
+   33 factor: PAR_A . expresion PAR_C
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    comparacion  ir al estado 40
+    expresion    ir al estado 41
+    termino      ir al estado 28
+    factor       ir al estado 29
+
+
+estado 31
+
+    9 seleccion: IF PAR_A condicion . PAR_C LLA_A programa LLA_C
+   10          | IF PAR_A condicion . PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C
+   18 condicion: condicion . OP_AND comparacion
+   19          | condicion . OP_OR comparacion
+
+    OP_AND  desplazar e ir al estado 42
+    OP_OR   desplazar e ir al estado 43
+    PAR_C   desplazar e ir al estado 44
+
+
+estado 32
+
+   17 condicion: comparacion .
+
+    $default  reduce usando la regla 17 (condicion)
+
+
+estado 33
+
+   21 comparacion: expresion . comparador expresion
+   27 expresion: expresion . OP_SUM termino
+   28          | expresion . OP_RES termino
+
+    OP_RES   desplazar e ir al estado 36
+    OP_SUM   desplazar e ir al estado 37
+    OP_MAY   desplazar e ir al estado 45
+    OP_MEN   desplazar e ir al estado 46
+    OP_MAIG  desplazar e ir al estado 47
+    OP_MEIG  desplazar e ir al estado 48
+    OP_IGU   desplazar e ir al estado 49
+
+    comparador  ir al estado 50
+
+
+estado 34
+
+   16 iteracion: WHILE PAR_A condicion . PAR_C LLA_A programa LLA_C
+   18 condicion: condicion . OP_AND comparacion
+   19          | condicion . OP_OR comparacion
+
+    OP_AND  desplazar e ir al estado 42
+    OP_OR   desplazar e ir al estado 43
+    PAR_C   desplazar e ir al estado 51
+
+
+estado 35
+
+   27 expresion: expresion . OP_SUM termino
+   28          | expresion . OP_RES termino
+   33 factor: PAR_A expresion . PAR_C
+
+    OP_RES  desplazar e ir al estado 36
+    OP_SUM  desplazar e ir al estado 37
+    PAR_C   desplazar e ir al estado 52
+
+
+estado 36
+
+   28 expresion: expresion OP_RES . termino
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    termino  ir al estado 53
+    factor   ir al estado 29
+
+
+estado 37
+
+   27 expresion: expresion OP_SUM . termino
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    termino  ir al estado 54
+    factor   ir al estado 29
+
+
+estado 38
+
+   31 termino: termino OP_DIV . factor
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    factor  ir al estado 55
+
+
+estado 39
+
+   30 termino: termino OP_MUL . factor
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    factor  ir al estado 56
+
+
+estado 40
+
+   20 condicion: PAR_A comparacion . PAR_C
+
+    PAR_C  desplazar e ir al estado 57
+
+
+estado 41
+
+   21 comparacion: expresion . comparador expresion
+   27 expresion: expresion . OP_SUM termino
+   28          | expresion . OP_RES termino
+   33 factor: PAR_A expresion . PAR_C
+
+    OP_RES   desplazar e ir al estado 36
+    OP_SUM   desplazar e ir al estado 37
+    OP_MAY   desplazar e ir al estado 45
+    OP_MEN   desplazar e ir al estado 46
+    OP_MAIG  desplazar e ir al estado 47
+    OP_MEIG  desplazar e ir al estado 48
+    OP_IGU   desplazar e ir al estado 49
+    PAR_C    desplazar e ir al estado 52
+
+    comparador  ir al estado 50
+
+
+estado 42
+
+   18 condicion: condicion OP_AND . comparacion
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    comparacion  ir al estado 58
+    expresion    ir al estado 33
+    termino      ir al estado 28
+    factor       ir al estado 29
+
+
+estado 43
+
+   19 condicion: condicion OP_OR . comparacion
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    comparacion  ir al estado 59
+    expresion    ir al estado 33
+    termino      ir al estado 28
+    factor       ir al estado 29
+
+
+estado 44
+
+    9 seleccion: IF PAR_A condicion PAR_C . LLA_A programa LLA_C
+   10          | IF PAR_A condicion PAR_C . LLA_A programa LLA_C ELSE LLA_A programa LLA_C
+
+    LLA_A  desplazar e ir al estado 60
+
+
+estado 45
+
+   25 comparador: OP_MAY .
+
+    $default  reduce usando la regla 25 (comparador)
+
+
+estado 46
+
+   24 comparador: OP_MEN .
+
+    $default  reduce usando la regla 24 (comparador)
+
+
+estado 47
+
+   22 comparador: OP_MAIG .
+
+    $default  reduce usando la regla 22 (comparador)
+
+
+estado 48
+
+   23 comparador: OP_MEIG .
+
+    $default  reduce usando la regla 23 (comparador)
+
+
+estado 49
+
+   26 comparador: OP_IGU .
+
+    $default  reduce usando la regla 26 (comparador)
+
+
+estado 50
+
+   21 comparacion: expresion comparador . expresion
+
+    CTE_INT  desplazar e ir al estado 22
+    CTE_FLO  desplazar e ir al estado 23
+    CTE_CHA  desplazar e ir al estado 24
+    ID       desplazar e ir al estado 25
+    PAR_A    desplazar e ir al estado 26
+
+    expresion  ir al estado 61
+    termino    ir al estado 28
+    factor     ir al estado 29
+
+
+estado 51
+
+   16 iteracion: WHILE PAR_A condicion PAR_C . LLA_A programa LLA_C
+
+    LLA_A  desplazar e ir al estado 62
+
+
+estado 52
+
+   33 factor: PAR_A expresion PAR_C .
+
+    $default  reduce usando la regla 33 (factor)
+
+
+estado 53
+
+   28 expresion: expresion OP_RES termino .
+   30 termino: termino . OP_MUL factor
+   31        | termino . OP_DIV factor
+
+    OP_DIV  desplazar e ir al estado 38
+    OP_MUL  desplazar e ir al estado 39
+
+    $default  reduce usando la regla 28 (expresion)
+
+
+estado 54
+
+   27 expresion: expresion OP_SUM termino .
+   30 termino: termino . OP_MUL factor
+   31        | termino . OP_DIV factor
+
+    OP_DIV  desplazar e ir al estado 38
+    OP_MUL  desplazar e ir al estado 39
+
+    $default  reduce usando la regla 27 (expresion)
+
+
+estado 55
+
+   31 termino: termino OP_DIV factor .
+
+    $default  reduce usando la regla 31 (termino)
+
+
+estado 56
+
+   30 termino: termino OP_MUL factor .
+
+    $default  reduce usando la regla 30 (termino)
+
+
+estado 57
+
+   20 condicion: PAR_A comparacion PAR_C .
+
+    $default  reduce usando la regla 20 (condicion)
+
+
+estado 58
+
+   18 condicion: condicion OP_AND comparacion .
+
+    $default  reduce usando la regla 18 (condicion)
+
+
+estado 59
+
+   19 condicion: condicion OP_OR comparacion .
+
+    $default  reduce usando la regla 19 (condicion)
+
+
+estado 60
+
+    9 seleccion: IF PAR_A condicion PAR_C LLA_A . programa LLA_C
+   10          | IF PAR_A condicion PAR_C LLA_A . programa LLA_C ELSE LLA_A programa LLA_C
+
+    ID     desplazar e ir al estado 1
+    IF     desplazar e ir al estado 2
+    WHILE  desplazar e ir al estado 3
+    INT    desplazar e ir al estado 4
+    FLOAT  desplazar e ir al estado 5
+    CHAR   desplazar e ir al estado 6
+
+    programa    ir al estado 63
+    sentencia   ir al estado 9
+    asignacion  ir al estado 10
+    seleccion   ir al estado 11
+    definicion  ir al estado 12
+    tipo        ir al estado 13
+    iteracion   ir al estado 14
+
+
+estado 61
+
+   21 comparacion: expresion comparador expresion .
+   27 expresion: expresion . OP_SUM termino
+   28          | expresion . OP_RES termino
+
+    OP_RES  desplazar e ir al estado 36
+    OP_SUM  desplazar e ir al estado 37
+
+    $default  reduce usando la regla 21 (comparacion)
+
+
+estado 62
+
+   16 iteracion: WHILE PAR_A condicion PAR_C LLA_A . programa LLA_C
+
+    ID     desplazar e ir al estado 1
+    IF     desplazar e ir al estado 2
+    WHILE  desplazar e ir al estado 3
+    INT    desplazar e ir al estado 4
+    FLOAT  desplazar e ir al estado 5
+    CHAR   desplazar e ir al estado 6
+
+    programa    ir al estado 64
+    sentencia   ir al estado 9
+    asignacion  ir al estado 10
+    seleccion   ir al estado 11
+    definicion  ir al estado 12
+    tipo        ir al estado 13
+    iteracion   ir al estado 14
+
+
+estado 63
+
+    3 programa: programa . sentencia
+    9 seleccion: IF PAR_A condicion PAR_C LLA_A programa . LLA_C
+   10          | IF PAR_A condicion PAR_C LLA_A programa . LLA_C ELSE LLA_A programa LLA_C
+
+    ID     desplazar e ir al estado 1
+    LLA_C  desplazar e ir al estado 65
+    IF     desplazar e ir al estado 2
+    WHILE  desplazar e ir al estado 3
+    INT    desplazar e ir al estado 4
+    FLOAT  desplazar e ir al estado 5
+    CHAR   desplazar e ir al estado 6
+
+    sentencia   ir al estado 19
+    asignacion  ir al estado 10
+    seleccion   ir al estado 11
+    definicion  ir al estado 12
+    tipo        ir al estado 13
+    iteracion   ir al estado 14
+
+
+estado 64
+
+    3 programa: programa . sentencia
+   16 iteracion: WHILE PAR_A condicion PAR_C LLA_A programa . LLA_C
+
+    ID     desplazar e ir al estado 1
+    LLA_C  desplazar e ir al estado 66
+    IF     desplazar e ir al estado 2
+    WHILE  desplazar e ir al estado 3
+    INT    desplazar e ir al estado 4
+    FLOAT  desplazar e ir al estado 5
+    CHAR   desplazar e ir al estado 6
+
+    sentencia   ir al estado 19
+    asignacion  ir al estado 10
+    seleccion   ir al estado 11
+    definicion  ir al estado 12
+    tipo        ir al estado 13
+    iteracion   ir al estado 14
+
+
+estado 65
+
+    9 seleccion: IF PAR_A condicion PAR_C LLA_A programa LLA_C .
+   10          | IF PAR_A condicion PAR_C LLA_A programa LLA_C . ELSE LLA_A programa LLA_C
+
+    ELSE  desplazar e ir al estado 67
+
+    $default  reduce usando la regla 9 (seleccion)
+
+
+estado 66
+
+   16 iteracion: WHILE PAR_A condicion PAR_C LLA_A programa LLA_C .
+
+    $default  reduce usando la regla 16 (iteracion)
+
+
+estado 67
+
+   10 seleccion: IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE . LLA_A programa LLA_C
+
+    LLA_A  desplazar e ir al estado 68
+
+
+estado 68
+
+   10 seleccion: IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A . programa LLA_C
+
+    ID     desplazar e ir al estado 1
+    IF     desplazar e ir al estado 2
+    WHILE  desplazar e ir al estado 3
+    INT    desplazar e ir al estado 4
+    FLOAT  desplazar e ir al estado 5
+    CHAR   desplazar e ir al estado 6
+
+    programa    ir al estado 69
+    sentencia   ir al estado 9
+    asignacion  ir al estado 10
+    seleccion   ir al estado 11
+    definicion  ir al estado 12
+    tipo        ir al estado 13
+    iteracion   ir al estado 14
+
+
+estado 69
+
+    3 programa: programa . sentencia
+   10 seleccion: IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa . LLA_C
+
+    ID     desplazar e ir al estado 1
+    LLA_C  desplazar e ir al estado 70
+    IF     desplazar e ir al estado 2
+    WHILE  desplazar e ir al estado 3
+    INT    desplazar e ir al estado 4
+    FLOAT  desplazar e ir al estado 5
+    CHAR   desplazar e ir al estado 6
+
+    sentencia   ir al estado 19
+    asignacion  ir al estado 10
+    seleccion   ir al estado 11
+    definicion  ir al estado 12
+    tipo        ir al estado 13
+    iteracion   ir al estado 14
+
+
+estado 70
+
+   10 seleccion: IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C .
+
+    $default  reduce usando la regla 10 (seleccion)
