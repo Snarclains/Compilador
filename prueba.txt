@@ -16,3 +16,7 @@ if(a==b)
 a = AVG(a,b)
 b = AVG( 1, b, 2, c)
 
+
+lista1 = [1 , 2, 3]
+
+c = INLIST( [1 , 2, 3] )

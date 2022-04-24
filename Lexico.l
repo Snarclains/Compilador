@@ -74,6 +74,8 @@ LLA_A		"{"
 LLA_C		"}"
 PAR_A		"("
 PAR_C		")"
+COR_A		"["
+COR_C		"]"
 FIN_SEN		";"
 
 /*PALABRAS RESERVADAS*/
@@ -118,6 +120,8 @@ INLIST		"inlist"|"INLIST"|"Inlist"
 {PAR_C}			{printf("\nParentesis cierra: %s\n", yytext); return PAR_C;}
 {LLA_A}			{printf("\nLlave abre: %s\n", yytext); return LLA_A;}
 {LLA_C}			{printf("\nLlave cierra: %s\n", yytext); return LLA_C;}
+{COR_A}			{printf("\Corchete abre: %s\n", yytext); return COR_A;}
+{COR_C}			{printf("\Corchete cierra: %s\n", yytext); return COR_C;}
 {FIN_SEN}		{printf("\nFin de sentencia: %s\n", yytext); return FIN_SEN;}
 
 {IF}			{printf("\nPalabra reservada IF: %s\n", yytext); return IF;}
@@ -129,6 +133,7 @@ INLIST		"inlist"|"INLIST"|"Inlist"
 {FOR}			{printf("\nPalabra reservada FOR: %s\n", yytext); return FOR;}
 {WRITE}			{printf("\nPalabra reservada WRITE: %s\n", yytext); return WRITE;}
 {READ}			{printf("\nPalabra reservada READ: %s\n", yytext); return READ;}
+
 {AVG}			{printf("\nAVG: %s\n", yytext); return AVG;}
 {INLIST}		{printf("\nINLIST: %s\n", yytext); return INLIST;}
 

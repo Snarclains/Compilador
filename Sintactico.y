@@ -62,6 +62,8 @@ FILE  *yyin;
 %token LLA_C
 %token PAR_A
 %token PAR_C
+%token COR_A
+%token COR_C
 %token FIN_SEN
 
 /*PALABRAS RESERVADAS*/
@@ -140,9 +142,14 @@ comparador: OP_MAIG
 expresion:  expresion OP_SUM termino {printf("SUMA\n");}
             | expresion OP_RES termino {printf("RESTA\n");}
             | expresion_AVG {printf("AVG\n");}
+            | expresion_INLIST {printf("INLIST\n");}
+            | lista {printf("lista\n");}
             | termino;
 
 expresion_AVG: AVG PAR_A lista_elementos PAR_C ;
+expresion_INLIST: INLIST PAR_A lista PAR_C;
+lista: COR_A lista_elementos COR_C;
+
 lista_elementos: termino CHAR_COMA lista_elementos;
 lista_elementos: expresion;
 
