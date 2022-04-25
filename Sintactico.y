@@ -81,10 +81,10 @@ FILE  *yyin;
 
 %%
 
-/*REGLAS (REVISAR!)*/
+/*REGLAS*/
 
 
-programacompleto : programa {printf("Compilacion OK\n");}
+programacompleto : programa {printf("Sintactico --> Compilacion OK\n");}
 
 /* <programa> -> <sentencia> */
 /* <programa> -> <programa> <sentencia>*/
@@ -100,16 +100,16 @@ sentencia:  asignacion
             |definicion;
 
 /* <asignacion> -> ID OP_ASIG <seleccion> */
-asignacion: ID OP_ASIG expresion {printf("ASIGNACION\n");};
+asignacion: ID OP_ASIG expresion {printf("Sintactico --> ASIGNACION\n");};
 
 /*<seleccion> -> IF PAR_A <condicion> PAR_C LLA_A <programa> LLA_C*/
 /*<seleccion> -> IF PAR_A <condicion> PAR_C LLA_A <programa> LLA_C ELSE LLA_A <programa> LLA_C*/
-seleccion:  IF PAR_A condicion PAR_C LLA_A programa LLA_C	{printf("IF\n");}
-            |IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C{printf("IF ELSE\n");};
+seleccion:  IF PAR_A condicion PAR_C LLA_A programa LLA_C	{printf("Sintactico --> IF\n");}
+            |IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C{printf("Sintactico --> IF ELSE\n");};
 
 /* <definicion> -> tipo ID | tipo asignacion */
-definicion: tipo ID {printf("DEFINICION\n");}
-            | tipo asignacion {printf("DEFINICION CON ASIGNACION\n");}
+definicion: tipo ID {printf("Sintactico --> DEFINICION\n");}
+            | tipo asignacion {printf("Sintactico --> DEFINICION CON ASIGNACION\n");}
 
 /* <tipo> -> INT | FLOAT | CHAR */
 tipo: INT
@@ -117,33 +117,34 @@ tipo: INT
       |CHAR;
 
 /*<iteracion> -> WHILE PAR_A <condicion> PAR_C LLA_A <programa> LLA_C*/
-iteracion:  WHILE PAR_A condicion PAR_C LLA_A programa LLA_C	{printf("WHILE\n");};
+iteracion:  WHILE PAR_A condicion PAR_C LLA_A programa LLA_C	{printf("Sintactico --> WHILE\n");};
 
 /*<condicion> -> <comparacion>*/
 /*<condicion> -> <condicion> OP_AND <comparacion>*/
 /*<condicion> -> <condicion> OP_OR <comparacion>*/
 /*<condicion> -> <comparacion>*/
 condicion:  comparacion 
-            | condicion OP_AND comparacion {printf("AND\n");}
-            | condicion OP_OR comparacion {printf("OR\n");}
+            | condicion OP_AND comparacion {printf("Sintactico --> AND\n");}
+            | condicion OP_OR comparacion {printf("Sintactico --> OR\n");}
             | PAR_A comparacion PAR_C;
 
 /*<comparacion> -> <expresion> <comparador> <expresion>*/
 comparacion:  expresion comparador expresion;
 
-/*<comparador> -> OP_MAIG | OP_MEIG | OP_MEN | OP_MAY | OP_IGU*/
+/*<comparador> -> OP_MAIG | OP_MEIG | OP_MEN | OP_MAY | OP_IGU | OP_DIS*/
 comparador: OP_MAIG 
             | OP_MEIG 
             | OP_MEN 
             | OP_MAY 
-            | OP_IGU;
+            | OP_IGU
+            | OP_DIS;
 
 /* <expresion> -> <expresion> + <termino> | <expresion> - <termino> | <termino>*/
-expresion:  expresion OP_SUM termino {printf("SUMA\n");}
-            | expresion OP_RES termino {printf("RESTA\n");}
-            | expresion_AVG {printf("AVG\n");}
-            | expresion_INLIST {printf("INLIST\n");}
-            | lista {printf("lista\n");}
+expresion:  expresion OP_SUM termino {printf("Sintactico --> SUMA\n");}
+            | expresion OP_RES termino {printf("Sintactico --> RESTA\n");}
+            | expresion_AVG {printf("Sintactico --> AVG\n");}
+            | expresion_INLIST {printf("Sintactico --> INLIST\n");}
+            | lista {printf("Sintactico --> lista\n");}
             | termino;
 
 expresion_AVG: AVG PAR_A lista_elementos PAR_C ;
@@ -154,8 +155,8 @@ lista_elementos: termino CHAR_COMA lista_elementos;
 lista_elementos: expresion;
 
 /* <termino> -> <termino> * <factor> | <termino> / <factor> | <factor>*/
-termino:  termino OP_MUL factor {printf("MULTIPLICACION\n");}
-            | termino OP_DIV factor {printf("DIVISION\n");}
+termino:  termino OP_MUL factor {printf("Sintactico --> MULTIPLICACION\n");}
+            | termino OP_DIV factor {printf("Sintactico --> DIVISION\n");}
             | factor;
 
 /* <factor> -> (<expresion>) | ID | CTE*/
@@ -166,34 +167,6 @@ factor: PAR_A expresion PAR_C
         | CTE_INT;
 
 
-
-/*
-sentencia:  	   
-	asignacion {printf(" FIN\n");} ;
-
-asignacion: 
-          ID OP_ASIG expresion {printf("    ID = Expresion es ASIGNACION\n");}
-	  ;
-
-expresion:
-         termino {printf("    Termino es Expresion\n");}
-	 |expresion OP_SUM termino {printf("    Expresion+Termino es Expresion\n");}
-	 |expresion OP_RES termino {printf("    Expresion-Termino es Expresion\n");}
-	 ;
-
-termino: 
-       factor {printf("    Factor es Termino\n");}
-       |termino OP_MUL factor {printf("     Termino*Factor es Termino\n");}
-       |termino OP_DIV factor {printf("     Termino/Factor es Termino\n");}
-       ;
-
-factor: 
-      ID {printf("    ID es Factor \n");}
-      | CTE_INT {printf("    CTE_INT es Factor\n");}
-	| PAR_A expresion PAR_C {printf("    Expresion entre parentesis es Factor\n");}
-     	;
-
-    */
 %%
 
 
@@ -201,7 +174,7 @@ int main(int argc, char *argv[])
 {
     if((yyin = fopen(argv[1], "rt"))==NULL)
     {
-        printf("\nNo se puede abrir el archivo de prueba: %s\n", argv[1]);
+        printf("Sintactico --> No se puede abrir el archivo de prueba: %s\n", argv[1]);
        
     }
     else
@@ -209,7 +182,7 @@ int main(int argc, char *argv[])
         
         yyparse();
 
-        printf("\nBISON finalizo la lectura del archivo %s \n", argv[1]);
+        printf("Sintactico --> BISON finalizo la lectura del archivo %s \n", argv[1]);
         
     }
 	fclose(yyin);
@@ -218,7 +191,7 @@ int main(int argc, char *argv[])
 
 int yyerror(void)
      {
-       printf("Error Sintactico\n");
+       printf("Sintactico --> Error Sintactico\n");
 	 exit (1);
      }
 

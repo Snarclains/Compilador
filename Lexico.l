@@ -41,15 +41,12 @@ CHAR_PUNCO		[";"]
 CHAR_DOSPU		[":"]
 
 /*DECLARACIONES*/
-/*CTE_INT	    	-?{DIGITO}{DIG_C_NUL}|0*/
 CTE_INT			{DIG_C_NUL}+
-/*CTE_FLO			(-?{DIGITO}{DIG_C_NUL}|0){CHAR_PUNTO}{DIGITO}**/
 CTE_FLO			{DIG_C_NUL}*"."{DIG_C_NUL}*|0  
-/*CTE_CHA	    	\"[^\n"]*\"*/
-CARACTER        [a-z,A-Z,0-9,=,>,<,!,:,+,\-,*,/,@]
-CTE_CHA           "\""({CARACTER}+|{ESPACIO})*"\""
+CARACTER        [a-z,A-Z,0-9,=,>,<,!,:,+,\-,*,/,@,.,?]
+CTE_CHA           "'"({CARACTER}+|{ESPACIO})*"'"
 ID				{LETRA}({LETRA}|{DIGITO}|{GUIONES})*
-CONTENIDO		({LETRA}+|{DIGITO}+|{ESPACIO})*
+CONTENIDO		({CARACTER}+|{ESPACIO})*
 COMENTARIO 		{INI_COM}{CONTENIDO}{FIN_COM}
 
 /*OPERADORES*/
@@ -93,95 +90,95 @@ INLIST		"inlist"|"INLIST"|"Inlist"
 
 %%
 
-{CHAR_COMA}			{printf("\nComa: %s\n", yytext); return CHAR_COMA;}
-{CHAR_PUNTO}		{printf("\nPunto: %s\n", yytext); return CHAR_PUNTO;}
-{CHAR_PUNCO}		{printf("\nPunto y coma: %s\n", yytext); return CHAR_PUNCO;}
-{CHAR_DOSPU}		{printf("\nDos puntos: %s\n", yytext); return CHAR_DOSPU;}
+{CHAR_COMA}			{printf("Lexico --> Coma: %s\n", yytext); return CHAR_COMA;}
+{CHAR_PUNTO}		{printf("Lexico --> Punto: %s\n", yytext); return CHAR_PUNTO;}
+{CHAR_PUNCO}		{printf("Lexico --> Punto y coma: %s\n", yytext); return CHAR_PUNCO;}
+{CHAR_DOSPU}		{printf("Lexico --> Dos puntos: %s\n", yytext); return CHAR_DOSPU;}
 
-{COMENTARIO}    { printf("Comentario \n");}
+{COMENTARIO}    { printf("Lexico --> Comentario \n");}
 
-{OP_SUM}		{printf("\nSuma: %s\n", yytext); return OP_SUM;}
-{OP_ASIG}		{printf("\nAsignacion: %s\n", yytext); return OP_ASIG;}
-{OP_MUL}		{printf("\nMultiplicacion: %s\n", yytext); return OP_MUL;}
-{OP_RES}		{printf("\nResta: %s\n", yytext); return OP_RES;}
-{OP_DIV}		{printf("\nDivision: %s\n", yytext); return OP_DIV;}
-{OP_MAY}		{printf("\nMayor: %s\n", yytext); return OP_MAY;}
-{OP_MEN}		{printf("\nMenor: %s\n", yytext); return OP_MEN;}
-{OP_MAIG}		{printf("\nMayor igual: %s\n", yytext); return OP_MAIG;}
-{OP_MEIG}		{printf("\nMenor igual: %s\n", yytext); return OP_MEIG;}
-{OP_IGU}		{printf("\nIguales: %s\n", yytext); return OP_IGU;}
-{OP_NEG}		{printf("\nNegacion: %s\n", yytext); return OP_NEG;}
-{OP_DIS}		{printf("\nDistinto: %s\n", yytext); return OP_DIS;}
-{OP_DOPU}		{printf("\nDos puntos: %s\n", yytext); return OP_DOPU;} // Consultar sobre este operador
-{OP_AND}		{printf("\nAnd: %s\n", yytext); return OP_AND;}
-{OP_OR}			{printf("\nOr: %s\n", yytext); return OP_OR;}
+{OP_SUM}		{printf("Lexico --> Suma: %s\n", yytext); return OP_SUM;}
+{OP_ASIG}		{printf("Lexico --> Asignacion: %s\n", yytext); return OP_ASIG;}
+{OP_MUL}		{printf("Lexico --> Multiplicacion: %s\n", yytext); return OP_MUL;}
+{OP_RES}		{printf("Lexico --> Resta: %s\n", yytext); return OP_RES;}
+{OP_DIV}		{printf("Lexico --> Division: %s\n", yytext); return OP_DIV;}
+{OP_MAY}		{printf("Lexico --> Mayor: %s\n", yytext); return OP_MAY;}
+{OP_MEN}		{printf("Lexico --> Menor: %s\n", yytext); return OP_MEN;}
+{OP_MAIG}		{printf("Lexico --> Mayor igual: %s\n", yytext); return OP_MAIG;}
+{OP_MEIG}		{printf("Lexico --> Menor igual: %s\n", yytext); return OP_MEIG;}
+{OP_IGU}		{printf("Lexico --> Iguales: %s\n", yytext); return OP_IGU;}
+{OP_NEG}		{printf("Lexico --> Negacion: %s\n", yytext); return OP_NEG;}
+{OP_DIS}		{printf("Lexico --> Distinto: %s\n", yytext); return OP_DIS;}
+{OP_DOPU}		{printf("Lexico --> Dos puntos: %s\n", yytext); return OP_DOPU;} // Consultar sobre este operador
+{OP_AND}		{printf("Lexico --> And: %s\n", yytext); return OP_AND;}
+{OP_OR}			{printf("Lexico --> Or: %s\n", yytext); return OP_OR;}
 
-{PAR_A}			{printf("\nParentesis abre: %s\n", yytext); return PAR_A;}
-{PAR_C}			{printf("\nParentesis cierra: %s\n", yytext); return PAR_C;}
-{LLA_A}			{printf("\nLlave abre: %s\n", yytext); return LLA_A;}
-{LLA_C}			{printf("\nLlave cierra: %s\n", yytext); return LLA_C;}
-{COR_A}			{printf("\Corchete abre: %s\n", yytext); return COR_A;}
-{COR_C}			{printf("\Corchete cierra: %s\n", yytext); return COR_C;}
-{FIN_SEN}		{printf("\nFin de sentencia: %s\n", yytext); return FIN_SEN;}
+{PAR_A}			{printf("Lexico --> Parentesis abre: %s\n", yytext); return PAR_A;}
+{PAR_C}			{printf("Lexico --> Parentesis cierra: %s\n", yytext); return PAR_C;}
+{LLA_A}			{printf("Lexico --> Llave abre: %s\n", yytext); return LLA_A;}
+{LLA_C}			{printf("Lexico --> Llave cierra: %s\n", yytext); return LLA_C;}
+{COR_A}			{printf("Lexico --> Corchete abre: %s\n", yytext); return COR_A;}
+{COR_C}			{printf("Lexico --> Corchete cierra: %s\n", yytext); return COR_C;}
+{FIN_SEN}		{printf("Lexico --> Fin de sentencia: %s\n", yytext); return FIN_SEN;}
 
-{IF}			{printf("\nPalabra reservada IF: %s\n", yytext); return IF;}
-{ELSE}			{printf("\nPalabra reservada ELSE: %s\n", yytext); return ELSE;}
-{WHILE}			{printf("\nPalabra reservada WHILE: %s\n", yytext); return WHILE;}
-{INT}			{printf("\nPalabra reservada INT: %s\n", yytext); return INT;}
-{FLOAT}			{printf("\nPalabra reservada FLOAT: %s\n", yytext); return FLOAT;}
-{CHAR}			{printf("\nPalabra reservada CHAR: %s\n", yytext); return CHAR;}
-{FOR}			{printf("\nPalabra reservada FOR: %s\n", yytext); return FOR;}
-{WRITE}			{printf("\nPalabra reservada WRITE: %s\n", yytext); return WRITE;}
-{READ}			{printf("\nPalabra reservada READ: %s\n", yytext); return READ;}
+{IF}			{printf("Lexico --> Palabra reservada IF: %s\n", yytext); return IF;}
+{ELSE}			{printf("Lexico --> Palabra reservada ELSE: %s\n", yytext); return ELSE;}
+{WHILE}			{printf("Lexico --> Palabra reservada WHILE: %s\n", yytext); return WHILE;}
+{INT}			{printf("Lexico --> Palabra reservada INT: %s\n", yytext); return INT;}
+{FLOAT}			{printf("Lexico --> Palabra reservada FLOAT: %s\n", yytext); return FLOAT;}
+{CHAR}			{printf("Lexico --> Palabra reservada CHAR: %s\n", yytext); return CHAR;}
+{FOR}			{printf("Lexico --> Palabra reservada FOR: %s\n", yytext); return FOR;}
+{WRITE}			{printf("Lexico --> Palabra reservada WRITE: %s\n", yytext); return WRITE;}
+{READ}			{printf("Lexico --> Palabra reservada READ: %s\n", yytext); return READ;}
 
-{AVG}			{printf("\nAVG: %s\n", yytext); return AVG;}
-{INLIST}		{printf("\nINLIST: %s\n", yytext); return INLIST;}
+{AVG}			{printf("Lexico --> Palabra reservada AVG: %s\n", yytext); return AVG;}
+{INLIST}		{printf("Lexico --> Palabra reservada INLIST: %s\n", yytext); return INLIST;}
 
 {CTE_INT}		{if (atof(yytext) > LIMIT_INT_SUP || atof(yytext) < LIMIT_INT_INF){
-                        printf( "El entero supera los limites permitidos.\n");
+                        printf( "Lexico --> El entero supera los limites permitidos.\n");
                         exit(1);
 					} 
-				printf("\nConstante entera: %s\n", yytext); return CTE_INT;}
+				printf("Lexico --> Constante entera: %s\n", yytext); return CTE_INT;}
 
 {CTE_FLO}		{if (atof(yytext) > LIMIT_FLOAT_SUP || atof(yytext) < LIMIT_FLOAT_INF){
-                        printf( "El real supera los limites permitidos. \n");
+                        printf( "Lexico --> El real supera los limites permitidos. \n");
                         exit(1);
 					}  
-				printf("\nConstante flotante: %s\n", yytext); return CTE_FLO;}
+				printf("Lexico --> Constante flotante: %s\n", yytext); return CTE_FLO;}
 
 {CTE_CHA}		{if (strlen(yytext) > LIMIT_STR){
-                        printf( "El string ingresado supera la cantidad maxima permitida. Cantidad: %d\n", LIMIT_STR);
+                        printf( "Lexico --> El string ingresado supera la cantidad maxima permitida. Cantidad: %d\n", LIMIT_STR);
                        	exit(1); 
 					}
-				printf("\nConstante char: %s\n", yytext); return CTE_CHA;}
+				printf("Lexico --> Constante char: %s\n", yytext); return CTE_CHA;}
 
 {ID}			{if (strlen(yytext) > LIMIT_ID){
-                        printf( "El nombre del identificador supera la cantidad maxima de caracters permitidos. Cantidad: %d\n", LIMIT_ID);
+                        printf( "Lexico --> El nombre del identificador supera la cantidad maxima de caracters permitidos. Cantidad: %d\n", LIMIT_ID);
                        	exit(1);
                     }
-				printf("\nIdentificador: %s\n", yytext);return ID;}
+				printf("Lexico --> Identificador: %s\n", yytext);return ID;}
 
 "\n"      		
 "\t"
 "\n\t"
 " "             		
 "\r\n"
-.			 {printf( "ERROR LEXICO : Caracter no reconocido: %s\n", yytext ); exit (0);}
-"ñ"			 {printf( "ERROR LEXICO : Caracter no reconocido: %s\n", yytext ); exit (0);}
-"Ñ"			 {printf( "ERROR LEXICO : Caracter no reconocido: %s\n", yytext ); exit (0);}
+.			 {printf( "Lexico --> ERROR LEXICO : Caracter no reconocido: %s\n", yytext ); exit (0);}
+"ñ"			 {printf( "Lexico --> ERROR LEXICO : Caracter no reconocido: %s\n", yytext ); exit (0);}
+"Ñ"			 {printf( "Lexico --> ERROR LEXICO : Caracter no reconocido: %s\n", yytext ); exit (0);}
 
 %%
 
 int main1 (int argc, char *argv[]){
 	if((yyin = fopen(argv[1], "rt")) == NULL){
-		printf("\nNo se puede abrir el archivo: %s\n", argv[1]);
+		printf("Lexico --> No se puede abrir el archivo: %s\n", argv[1]);
 		exit(0);
 	}
 
-	printf("\nEl archivo %s se abrio correctamente\n", argv[1]);
+	printf("Lexico --> El archivo %s se abrio correctamente\n", argv[1]);
 	yylex();
 
-	printf("\nFLEX finalizo la lectura del archivo %s \n", argv[1]);
+	printf("Lexico --> FLEX finalizo la lectura del archivo %s \n", argv[1]);
 	fclose(yyin);
 
 	return 0;
