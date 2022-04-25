@@ -1,0 +1,19 @@
+NOMBRE                        |  TIPO   |              VALOR           | L |
+----------------------------------------------------------------------------
+IF                            |	PR      |                  -               	| - |
+ELSE                          |	PR      |                  -               	| - |
+WHILE                         |	PR      |                  -               	| - |
+INT                           |	PR      |                  -               	| - |
+FLOAT                         |	PR      |                  -               	| - |
+CHAR                          |	PR      |                  -               	| - |
+FOR                           |	PR      |                  -               	| - |
+WRITE                         |	PR      |                  -               	| - |
+READ                          |	PR      |                  -               	| - |
+AVG                           |	PR      |                  -               	| - |
+INLIST                        |	PR      |                  -               	| - |
+a                             |	Int     |                  -               	| - |
+b                             |	Int     |                  -               	| - |
+c                             |	Int     |                  -               	| - |
+d                             |	Float   |                  -               	| - |
+f                             |	Int     |                  -               	| - |
+g                             |	Float   |                  -               	| - |
