@@ -1,6 +1,7 @@
 # Compilador
 						
 ## Grupo 2
+### Docente Daniel
 
 | Apellido | Dni | GCI | Temas Especiales | Lenguaje |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
