@@ -1,71 +1,66 @@
-/*Definiciones*/
+-/Declaracion de variables/-
 
-int a
-int b=0
-int c
-float d
-char cadena
+DECVAR
+	a, b, c : INT
+	d : float
+		cadena : Char
+ENDDEC
 
-/*Asignaciones*/
+-/Asignaciones/-
 
-a=1
-d=1.2
-cadena='Esto es una cadena'
+a:=1
+b:=0
+d:=1.2
+cadena:="Esto es una cadena"
 
-/*suma, resta, mutiplicacion y division*/
+-/suma, resta, mutiplicacion y division/-
 
-c=a+b
-c=2-a*b
-c=3+a/b
+c:=a+b
+c:=2-a*b
+c:=3+a/b
 
-/*condicionales y operadores*/
+-/condicionales y operadores/-
 
 if(a!=b)
 {
- a=2
+ a:=2
 }
 
 if(a<b || a==b)
 {
- a=10
+ a:=10
 }
 else
 {
- a=1
+ a:=1
 }
 
-/*iteracion*/
+-/iteracion/-
 
 while(b<a)
 {
- b=b+1
+ b:=b+1
 }
 
-/*temas especiales AVG e INLIST*/
+-/temas especiales AVG e INLIST/-
 
-a = AVG(a,b)
-b = AVG( 1, b, 2, c)
+a := AVG(a,b)
+b := AVG( 1, b, 2, c)
 
+-/Error variable fuera de rango/-
 
-lista1 = [1 , 2, 3]
+-/int f=99999999999/-
 
-c = INLIST( [1 , 2, 3] )
-
-
-/*Error variable fuera de rango*/
-
-/*int f=99999999999*/
-
-/*float g=999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999.1*/
+-/float g :=99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999.1/-
 
 
-/*Error de caracter no reconocido*/
+-/Error de caracter no reconocido/-
 
-/*?*/
+-/?/-
 
-/*Error sintaxis no reconocida*/
+-/Error sintaxis no reconocida/-
 
-/*char h="hola"*/
+-/char h="hola"/-
 
 
 

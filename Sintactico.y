@@ -74,6 +74,8 @@ FILE  *yyin;
 %token FLOAT
 %token CHAR
 %token FOR
+%token DECVAR
+%token ENDDEC
 %token WRITE
 %token READ
 %token AVG
@@ -82,7 +84,6 @@ FILE  *yyin;
 %%
 
 /*REGLAS*/
-
 
 programacompleto : programa {printf("Sintactico --> Compilacion OK\n");}
 
@@ -93,13 +94,13 @@ programa: sentencia | programa sentencia ;
 /* <sentencia> -> <asignacion> */
 /* <sentencia> -> <iteracion> */
 /* <sentencia> -> <seleccion> */
-/* <sentencia> -> <definicion> */
+/* <sentencia> -> <declaracion> */
 sentencia:  asignacion
             |iteracion
             |seleccion
-            |definicion;
+            |declaracion;
 
-/* <asignacion> -> ID OP_ASIG <seleccion> */
+/* <asignacion> -> ID OP_ASIG <expresion> */
 asignacion: ID OP_ASIG expresion {printf("Sintactico --> ASIGNACION\n");};
 
 /*<seleccion> -> IF PAR_A <condicion> PAR_C LLA_A <programa> LLA_C*/
@@ -107,9 +108,16 @@ asignacion: ID OP_ASIG expresion {printf("Sintactico --> ASIGNACION\n");};
 seleccion:  IF PAR_A condicion PAR_C LLA_A programa LLA_C	{printf("Sintactico --> IF\n");}
             |IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C{printf("Sintactico --> IF ELSE\n");};
 
-/* <definicion> -> tipo ID | tipo asignacion */
-definicion: tipo ID {printf("Sintactico --> DEFINICION\n");}
-            | tipo asignacion {printf("Sintactico --> DEFINICION CON ASIGNACION\n");}
+/* <declaracion> -> DECVAR <lista_declaracion> ENDDEC */
+declaracion: DECVAR lista_declaracion ENDDEC {printf("Sintactico --> DECLARACION\n");};
+
+/* <lista_declaracion> -> <lista_declaracion> <lista_id> CHAR_DOSPU <tipo> */
+lista_declaracion: lista_declaracion lista_id CHAR_DOSPU tipo
+                    |lista_id CHAR_DOSPU tipo;
+
+/* <lista_id> -> <lista_id> CHAR_COMA ID */
+lista_id: lista_id CHAR_COMA ID
+          |ID;
 
 /* <tipo> -> INT | FLOAT | CHAR */
 tipo: INT
@@ -172,26 +180,25 @@ factor: PAR_A expresion PAR_C
 
 int main(int argc, char *argv[])
 {
-    if((yyin = fopen(argv[1], "rt"))==NULL)
-    {
-        printf("Sintactico --> No se puede abrir el archivo de prueba: %s\n", argv[1]);
-       
-    }
-    else
-    { 
-        
-        yyparse();
+  if((yyin = fopen(argv[1], "rt"))==NULL)
+  {
+    printf("Sintactico --> No se puede abrir el archivo de prueba: %s\n", argv[1]);
+  }
+  else
+  { 
+    yyparse();
 
-        printf("Sintactico --> BISON finalizo la lectura del archivo %s \n", argv[1]);
-        
-    }
+    printf("Sintactico --> BISON finalizo la lectura del archivo %s \n", argv[1]);
+  }
+
 	fclose(yyin);
-        return 0;
+
+  return 0;
 }
 
 int yyerror(void)
-     {
-       printf("Sintactico --> Error Sintactico\n");
-	 exit (1);
-     }
+{
+  printf("Sintactico --> Error Sintactico\n");
+	exit (1);
+}
 

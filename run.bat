@@ -2,6 +2,8 @@
 flex Lexico.l
 bison -dyv Sintactico.y
 
+del ts.txt
+
 gcc lex.yy.c y.tab.c -o Primera.exe
 
 Primera.exe prueba.txt
