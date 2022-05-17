@@ -98,7 +98,8 @@ programa: sentencia | programa sentencia ;
 sentencia:  asignacion
             |iteracion
             |seleccion
-            |declaracion;
+            |declaracion
+            |entrada_salida;
 
 /* <asignacion> -> ID OP_ASIG <expresion> */
 asignacion: ID OP_ASIG expresion {printf("Sintactico --> ASIGNACION\n");};
@@ -119,6 +120,11 @@ lista_declaracion: lista_declaracion lista_id CHAR_DOSPU tipo
 lista_id: lista_id CHAR_COMA ID
           |ID;
 
+/*<entrada_salida> -> WRITE */
+entrada_salida: READ ID {printf("Sintactico --> READ ID\n");}
+                | WRITE ID {printf("Sintactico --> WRITE ID\n");}
+                | WRITE CTE_CHA {printf("Sintactico --> WRITE STR\n");};
+
 /* <tipo> -> INT | FLOAT | CHAR */
 tipo: INT
       |FLOAT
@@ -137,7 +143,8 @@ condicion:  comparacion
             | PAR_A comparacion PAR_C;
 
 /*<comparacion> -> <expresion> <comparador> <expresion>*/
-comparacion:  expresion comparador expresion;
+comparacion:  expresion comparador expresion
+              | expresion_INLIST {printf("Sintactico --> INLIST\n");};
 
 /*<comparador> -> OP_MAIG | OP_MEIG | OP_MEN | OP_MAY | OP_IGU | OP_DIS*/
 comparador: OP_MAIG 
@@ -151,16 +158,16 @@ comparador: OP_MAIG
 expresion:  expresion OP_SUM termino {printf("Sintactico --> SUMA\n");}
             | expresion OP_RES termino {printf("Sintactico --> RESTA\n");}
             | expresion_AVG {printf("Sintactico --> AVG\n");}
-            | expresion_INLIST {printf("Sintactico --> INLIST\n");}
-            | lista {printf("Sintactico --> lista\n");}
             | termino;
 
-expresion_AVG: AVG PAR_A lista_elementos PAR_C ;
-expresion_INLIST: INLIST PAR_A lista PAR_C;
-lista: COR_A lista_elementos COR_C;
+expresion_AVG: AVG PAR_A COR_A lista_expresion_avg COR_C PAR_C ;
+lista_expresion_avg: lista_expresion_avg CHAR_COMA expresion
+                     | expresion;
 
-lista_elementos: termino CHAR_COMA lista_elementos;
-lista_elementos: expresion;
+expresion_INLIST: INLIST PAR_A ID CHAR_PUNCO COR_A lista_expresion_inlist COR_C PAR_C ;
+lista_expresion_inlist: lista_expresion_inlist CHAR_PUNCO expresion
+                        | expresion;
+
 
 /* <termino> -> <termino> * <factor> | <termino> / <factor> | <factor>*/
 termino:  termino OP_MUL factor {printf("Sintactico --> MULTIPLICACION\n");}

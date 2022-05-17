@@ -35,6 +35,16 @@ else
  a:=1
 }
 
+if(a==c)
+{
+ a:=1
+
+ if(b==c)
+ {
+  b:=1
+ }
+}
+
 -/iteracion/-
 
 while(b<a)
@@ -44,8 +54,13 @@ while(b<a)
 
 -/temas especiales AVG e INLIST/-
 
-a := AVG(a,b)
-b := AVG( 1, b, 2, c)
+a := AVG([a,b])
+b := AVG([1+3, b, 2*4.1, c])
+
+if(INLIST (a; [2*b+7 ; 12 ; a+b*(34+d) ; 48]))
+{
+	a:=3
+}
 
 -/Error variable fuera de rango/-
 
@@ -61,6 +76,12 @@ b := AVG( 1, b, 2, c)
 -/Error sintaxis no reconocida/-
 
 -/char h="hola"/-
+
+-/Entradas y salidas/-
+WRITE "PROBANDO"
+WRITE a
+READ b
+
 
 
 
