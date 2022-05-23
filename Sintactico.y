@@ -10,7 +10,6 @@ FILE  *yyin;
   int yyerror();
   int yylex();
 
-
 %}
 
 %left OP_SUM OP_RES

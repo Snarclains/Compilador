@@ -26,6 +26,7 @@ int yyerror(void);
 
 int lineno = 1;
 
+
 %}
 
 /*OPCIONES*/

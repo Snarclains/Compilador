@@ -4,9 +4,9 @@ bison -dyv Sintactico.y
 
 del ts.txt
 
-gcc lex.yy.c y.tab.c -o Primera.exe
+gcc lex.yy.c y.tab.c -o Segunda.exe
 
-Primera.exe prueba.txt
+Segunda.exe prueba.txt
 
 @echo off
 
