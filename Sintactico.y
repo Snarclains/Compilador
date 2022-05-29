@@ -4,11 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "y.tab.h"
-int yystopparser=0;
+
 FILE  *yyin;
 
-  int yyerror();
-  int yylex();
+int yystopparser=0;
+int yyerror();
+int yylex();
+
+char pi[1000];
+int pila[10];
+
+int p_pi = 0;
+int p_pila = 0;
 
 %}
 
@@ -84,101 +91,128 @@ FILE  *yyin;
 
 /*REGLAS*/
 
-programacompleto : programa {printf("Sintactico --> Compilacion OK\n");}
+/*Lista de reglas:
+<programa_completo>       -> <programa> {generar_archivo_cod_inter(); generar_assembler();}
+<programa>                -> <sentencia> | <programa> <sentencia>
+<sentencia>               -> <asignacion> | <iteracion> | <seleccion> | <declaracion> | <entrada_salida>
 
-/* <programa> -> <sentencia> */
-/* <programa> -> <programa> <sentencia>*/
+<asignacion>              -> ID {insertar(id);} OP_ASIG <expresion> {insertar(":=");}
+
+<iteracion>               -> WHILE {insertar(@salto_if); apilar(); avanzar(); insertar(":="); aplilar(); insertar(ET);}
+                             PAR_A <condicion> PAR_C {insertar(CMP); insertar(@a_comp); insertar(@salto_if);} 
+                             LLA_A <programa> LLA_C {insertar(BI); desapilar_insertar(p_pi); desapilar_insertar(p_pi);}
+
+<seleccion>               -> IF {insertar(@salto_if); apilar(); avanzar(); insertar(":=");} PAR_A <condicion> PAR_C {insertar(CMP); insertar(@a_comp); insertar(@salto_if);} 
+                             LLA_A <programa> LLA_C {desapilar_insertar(p_pi);}
+                             | IF {insertar(@salto_if); apilar(); avanzar(); insertar(":=");} PAR_A <condicion> PAR_C {insertar(CMP); insertar(@a_comp); insertar(@salto_if);} 
+                               LLA_A <programa> LLA_C ELSE {insertar(BI); desapilar_insertar(p_pi+1); apilar(); avanzar} LLA_A <programa> LLA_C {desapilar_insertar(p_pi);}
+<condicion>               -> <condicion> {insertar(CMP); insertar(@a_comp); insertar(@salto_if);} OP_AND <comparacion>
+                             | <condicion> {insertar(CMP); insertar(@b_comp); apilar(); avanzar();} OP_OR <comparacion> {desapilar_insertar(p_pi+4);}
+                             | <comparacion>
+<comparacion>             -> <expresion> <comparador> <expresion>
+                             | <expresion_INLIST> {@a_comp = "BNE"; @b_comp = "BEQ";}
+<comparador>              -> OP_MAIG {@a_comp = "BLT"; @b_comp = "BGE";}
+                             | OP_MAY  {@a_comp = "BLE"; @b_comp = "BGT";}
+                             | OP_MEIG {@a_comp = "BGT"; @b_comp = "BLE";}
+                             | OP_MEN  {@a_comp = "BGE"; @b_comp = "BLT";}
+                             | OP_IGU  {@a_comp = "BNE"; @b_comp = "BEQ";}
+                             | OP_DIS  {@a_comp = "BEQ"; @b_comp = "BNE";}
+
+<declaracion>             -> DECVAR <lista_declaracion> ENDDEC
+<lista_declaracion>       -> <lista_declaracion> <lista_id> CHAR_DOSPU <tipo>
+<lista_id>                -> <lista_id> CHAR_COMA ID {actualizar_tipo(type);}
+                             | ID {actualizar_tipo(type);}
+<tipo>                    -> INT {type = "int";}
+                             | FLOAT {type = "float";}
+                             | CHAR {type = "char";}
+
+<entrada_salida>          -> READ ID ????
+                             | WRITE ID ???
+                             | WRITE CTE_CHA ????
+
+<expresion_AVG>           -> AVG {insertar(@avg);} PAR_A COR_A <lista_expresion_avg> COR_C PAR_C {insertar("+"); insertar(@cont_avg); insertar("/")}
+<lista_expresion_avg>     -> <lista_expresion_avg> CHAR_COMA <expresion> {insertar("+"); @cont_avg++;}
+                             | <expresion> {@cont_avg++;}
+
+<expresion_INLIST>        -> INLIST {insertar(@salto_in); apilar(); avanzar(); insertar(":=");} PAR_A ID {insertar(@aux_inlist); insertar(id); insertar(":="); insertar(@aux_inlisted);}
+                             CHAR_PUNCO COR_A <lista_expresion_inlist> COR_C PAR_C {insertar(@aux_inlist); insertar(@aux_inlisted);}
+<lista_expresion_inlist>  -> <lista_expresion_inlist> CHAR_PUNCO {insertar(@aux_inlisted);} <expresion> {insertar(":="); insertar(CMP); insertar(@salto_in);}
+                             | <expresion> {insertar(":="); insertar(CMP); insertar(BEQ); insertar(@salto_in);}
+
+<expresion>               -> <expresion> + <termino> {insertar("+");}
+                             | <expresion> - <termino> {insertar("-");}
+                             | expresion_AVG
+                             | <termino>
+<termino>                 -> <termino> * <factor> {insertar("*");}
+                             | <termino> / <factor> {insertar("/");}
+                             | <factor>
+<factor>                  -> PAR_A <expresion> PAR_C
+                             | ID {insertar(id);}
+                             | CTE {insertar(cte);}
+*/
+
+programa_completo: programa {generar_archivo_cod_inter(); generar_assembler(); printf("Sintactico --> Compilacion OK\n");}
+
 programa: sentencia | programa sentencia ; 
 
-/* <sentencia> -> <asignacion> */
-/* <sentencia> -> <iteracion> */
-/* <sentencia> -> <seleccion> */
-/* <sentencia> -> <declaracion> */
-sentencia:  asignacion
-            |iteracion
-            |seleccion
-            |declaracion
-            |entrada_salida;
+sentencia:  asignacion | iteracion | seleccion | declaracion | entrada_salida;
 
-/* <asignacion> -> ID OP_ASIG <expresion> */
-asignacion: ID OP_ASIG expresion {printf("Sintactico --> ASIGNACION\n");};
+asignacion: ID {insertar(ID);} OP_ASIG expresion {insertar(":="); printf("Sintactico --> ASIGNACION\n");};
 
-/*<seleccion> -> IF PAR_A <condicion> PAR_C LLA_A <programa> LLA_C*/
-/*<seleccion> -> IF PAR_A <condicion> PAR_C LLA_A <programa> LLA_C ELSE LLA_A <programa> LLA_C*/
-seleccion:  IF PAR_A condicion PAR_C LLA_A programa LLA_C	{printf("Sintactico --> IF\n");}
-            |IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C{printf("Sintactico --> IF ELSE\n");};
+iteracion:  WHILE {insertar(@salto_if); apilar(); avanzar(); insertar(":="); aplilar(); insertar(ET);}
+            PAR_A condicion PAR_C {insertar(CMP); insertar(@a_comp); insertar(@salto_if);}
+            LLA_A programa LLA_C	{insertar(BI); desapilar_insertar(p_pi); desapilar_insertar(p_pi); printf("Sintactico --> WHILE\n");};
 
-/* <declaracion> -> DECVAR <lista_declaracion> ENDDEC */
+seleccion:  IF {insertar(@salto_if); apilar(); avanzar(); insertar(":=");} PAR_A condicion PAR_C {insertar(CMP); insertar(@a_comp); insertar(@salto_if);}
+            LLA_A programa LLA_C	{desapilar_insertar(p_pi); printf("Sintactico --> IF\n");}
+            | IF {insertar(@salto_if); apilar(); avanzar(); insertar(":=");} PAR_A condicion PAR_C {insertar(CMP); insertar(@a_comp); insertar(@salto_if);}
+              LLA_A programa LLA_C ELSE {insertar(BI); desapilar_insertar(p_pi+1); apilar(); avanzar} LLA_A programa LLA_C {desapilar_insertar(p_pi); printf("Sintactico --> IF ELSE\n");};
+condicion:  comparacion 
+            | condicion {insertar(CMP); insertar(@a_comp); insertar(@salto_if);} OP_AND comparacion {printf("Sintactico --> AND\n");}
+            | condicion {insertar(CMP); insertar(@b_comp); apilar(); avanzar();} OP_OR comparacion {desapilar_insertar(p_pi+4); printf("Sintactico --> OR\n");}
+            | PAR_A comparacion PAR_C;
+comparacion:  expresion comparador expresion
+              | expresion_INLIST {@a_comp = "BNE"; @b_comp = "BEQ"; printf("Sintactico --> INLIST\n");};
+comparador: OP_MAIG {@a_comp = "BLT"; @b_comp = "BGE";}
+            | OP_MAY  {@a_comp = "BLE"; @b_comp = "BGT";}
+            | OP_MEIG {@a_comp = "BGT"; @b_comp = "BLE";}
+            | OP_MEN  {@a_comp = "BGE"; @b_comp = "BLT";}
+            | OP_IGU  {@a_comp = "BNE"; @b_comp = "BEQ";}
+            | OP_DIS  {@a_comp = "BEQ"; @b_comp = "BNE";};
+
 declaracion: DECVAR lista_declaracion ENDDEC {printf("Sintactico --> DECLARACION\n");};
+lista_declaracion:  lista_declaracion lista_id CHAR_DOSPU tipo | lista_id CHAR_DOSPU tipo;
+lista_id: lista_id CHAR_COMA ID {actualizar_tipo(type);}
+          | ID {actualizar_tipo(type);};
+tipo: INT {type = "int";}
+      | FLOAT {type = "float";}
+      | CHAR {type = "char";};
 
-/* <lista_declaracion> -> <lista_declaracion> <lista_id> CHAR_DOSPU <tipo> */
-lista_declaracion: lista_declaracion lista_id CHAR_DOSPU tipo
-                    |lista_id CHAR_DOSPU tipo;
-
-/* <lista_id> -> <lista_id> CHAR_COMA ID */
-lista_id: lista_id CHAR_COMA ID
-          |ID;
-
-/*<entrada_salida> -> WRITE */
 entrada_salida: READ ID {printf("Sintactico --> READ ID\n");}
                 | WRITE ID {printf("Sintactico --> WRITE ID\n");}
                 | WRITE CTE_CHA {printf("Sintactico --> WRITE STR\n");};
 
-/* <tipo> -> INT | FLOAT | CHAR */
-tipo: INT
-      |FLOAT
-      |CHAR;
+expresion_AVG:  AVG {insertar(@avg);} PAR_A COR_A lista_expresion_avg COR_C PAR_C {insertar("+"); insertar(@cont_avg); insertar("/")};
+lista_expresion_avg:  lista_expresion_avg CHAR_COMA expresion {insertar("+"); @cont_avg++;}
+                     | expresion {@cont_avg++;};
 
-/*<iteracion> -> WHILE PAR_A <condicion> PAR_C LLA_A <programa> LLA_C*/
-iteracion:  WHILE PAR_A condicion PAR_C LLA_A programa LLA_C	{printf("Sintactico --> WHILE\n");};
+expresion_INLIST: INLIST {insertar(@salto_in); apilar(); avanzar(); insertar(":=");} PAR_A ID {insertar(@aux_inlist); insertar(ID); insertar(":="); insertar(@aux_inlisted);}
+                  CHAR_PUNCO COR_A lista_expresion_inlist COR_C PAR_C {insertar(@aux_inlist); insertar(@aux_inlisted);};
+lista_expresion_inlist: lista_expresion_inlist CHAR_PUNCO {insertar(@aux_inlisted);} expresion {insertar(":="); insertar(CMP); insertar(@salto_in);}
+                        | expresion {insertar(":="); insertar(CMP); insertar(BEQ); insertar(@salto_in);};
 
-/*<condicion> -> <comparacion>*/
-/*<condicion> -> <condicion> OP_AND <comparacion>*/
-/*<condicion> -> <condicion> OP_OR <comparacion>*/
-/*<condicion> -> <comparacion>*/
-condicion:  comparacion 
-            | condicion OP_AND comparacion {printf("Sintactico --> AND\n");}
-            | condicion OP_OR comparacion {printf("Sintactico --> OR\n");}
-            | PAR_A comparacion PAR_C;
-
-/*<comparacion> -> <expresion> <comparador> <expresion>*/
-comparacion:  expresion comparador expresion
-              | expresion_INLIST {printf("Sintactico --> INLIST\n");};
-
-/*<comparador> -> OP_MAIG | OP_MEIG | OP_MEN | OP_MAY | OP_IGU | OP_DIS*/
-comparador: OP_MAIG 
-            | OP_MEIG 
-            | OP_MEN 
-            | OP_MAY 
-            | OP_IGU
-            | OP_DIS;
-
-/* <expresion> -> <expresion> + <termino> | <expresion> - <termino> | <termino>*/
-expresion:  expresion OP_SUM termino {printf("Sintactico --> SUMA\n");}
-            | expresion OP_RES termino {printf("Sintactico --> RESTA\n");}
+expresion:  expresion OP_SUM termino {insertar("+"); printf("Sintactico --> SUMA\n");}
+            | expresion OP_RES termino {insertar("-"); printf("Sintactico --> RESTA\n");}
             | expresion_AVG {printf("Sintactico --> AVG\n");}
             | termino;
-
-expresion_AVG: AVG PAR_A COR_A lista_expresion_avg COR_C PAR_C ;
-lista_expresion_avg: lista_expresion_avg CHAR_COMA expresion
-                     | expresion;
-
-expresion_INLIST: INLIST PAR_A ID CHAR_PUNCO COR_A lista_expresion_inlist COR_C PAR_C ;
-lista_expresion_inlist: lista_expresion_inlist CHAR_PUNCO expresion
-                        | expresion;
-
-
-/* <termino> -> <termino> * <factor> | <termino> / <factor> | <factor>*/
-termino:  termino OP_MUL factor {printf("Sintactico --> MULTIPLICACION\n");}
-            | termino OP_DIV factor {printf("Sintactico --> DIVISION\n");}
-            | factor;
-
-/* <factor> -> (<expresion>) | ID | CTE*/
+termino:  termino OP_MUL factor {insertar("*"); printf("Sintactico --> MULTIPLICACION\n");}
+          | termino OP_DIV factor {insertar("/"); printf("Sintactico --> DIVISION\n");}
+          | factor;
 factor: PAR_A expresion PAR_C 
-        | ID 
-        | CTE_CHA
-        | CTE_FLO
-        | CTE_INT;
+        | ID {insertar(ID);}
+        | CTE_CHA {insertar(CTE_CHA);}
+        | CTE_FLO {insertar(CTE_FLO);}
+        | CTE_INT {insertar(CTE_INT);};
 
 
 %%
@@ -202,9 +236,70 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+void generar_archivo_cod_inter(){
+  FILE *pf;
+	
+  pf = fopen("polaca.txt", "wt");
+	fputs(pi,pf);
+
+  fclose(pf);
+}
+
+void generar_assembler(){
+  //
+}
+
+//Inserta un elemento en la PI
+void insertar(char* elemento){
+  strcat(elemento,",");
+
+  strcpy(pi[p_pi],elemento);
+  
+  while(pi[p_pi] != '\0'){
+    p_pi++;
+  }
+}
+
+//Apila un numero de posicion de la PI
+void apilar(){
+  p_pila++;
+
+  pila[p_pila] = p_pi;
+}
+
+//Avanza una posicion en la PI
+void avanzar(){
+  p_pi++;
+}
+
+//Desapila e inserta en la posicion recibida de PI
+void desapilar_insertar(int* p_polaca){
+  int aux = pila[p_pila];
+
+  p_pila--;
+
+  p_pi[aux] = p_polaca;
+}
+
+//Inserta el type del ultimo ID registrado
+void actualizar_tipo(char type){
+	FILE *pf;
+	char strline[100];
+  
+  pf = fopen("ts.txt", "at");
+
+	fseek(pf, -79, SEEK_END);
+  fgets(strline, 99, pf);
+  sprintf(strline[34], "%-10s|%-32s|\n","type","strline[46]");
+
+  fseek(pf, -76, SEEK_END);
+  fputs(strline,pf);
+
+  fclose(pf);
+}
+
 int yyerror(void)
 {
   printf("Sintactico --> Error Sintactico\n");
 	exit (1);
 }
-
