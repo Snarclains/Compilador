@@ -4,3 +4,10 @@ b                                |int       |                                |
 c                                |int       |                                |
 d                                |float     |                                |
 cadena                           |char      |                                |
+_1                               |int       |1                               |
+_0                               |int       |0                               |
+_1.2                             |float     |1.2                             |
+_"Esto es una cadena"            |string    |"Esto es una cadena"            |18        
+_2                               |int       |2                               |
+_3                               |int       |3                               |
+_10                              |int       |10                              |

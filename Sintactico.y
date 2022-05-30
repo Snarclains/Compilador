@@ -105,6 +105,7 @@ int pila[10];
 %token AVG
 %token INLIST
 
+
 %%
 
 /*REGLAS*/
@@ -124,10 +125,9 @@ iteracion:  WHILE {insertar("@salto_if"); apilar(); avanzar(); insertar(":="); a
 
 seleccion:  IF PAR_A condicion PAR_C LLA_A programa LLA_C {printf("Sintactico --> IF\n");}
             | IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C {printf("Sintactico --> IF ELSE\n");};
-condicion:  comparacion 
-            | condicion {insertar("CMP"); insertar(a_comp); insertar("@salto_if");} OP_AND comparacion {printf("Sintactico --> AND\n");}
+condicion:  condicion {insertar("CMP"); insertar(a_comp); insertar("@salto_if");} OP_AND comparacion {printf("Sintactico --> AND\n");}
             | condicion {insertar("CMP"); insertar(b_comp); apilar(); avanzar();} OP_OR comparacion {desapilar_insertar(p_pi+4); printf("Sintactico --> OR\n");}
-            | PAR_A comparacion PAR_C;
+            | comparacion;
 comparacion:  expresion comparador expresion
               | expresion_INLIST {strcpy(a_comp,"BNE"); strcpy(b_comp,"BEQ"); printf("Sintactico --> INLIST\n");};
 comparador: OP_MAIG   {strcpy(a_comp,"BLT"); strcpy(b_comp,"BGE");}
@@ -206,13 +206,14 @@ void generar_assembler(){
 
 //Inserta un elemento en la PI
 void insertar(char* elemento){
-  strcat(elemento,",");
+  char aux[33];
 
-  strcpy(&pi[p_pi],elemento);
+  strcat(aux,"elemento");
+  strcat(aux,",");
+
+  strcpy(&pi[p_pi],aux);
   
-  while(pi[p_pi] != '\0'){
-    p_pi++;
-  }
+  p_pi = p_pi + strlen(elemento);
 }
 
 //Apila un numero de posicion de la PI
