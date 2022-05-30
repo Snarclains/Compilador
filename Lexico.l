@@ -26,6 +26,7 @@ int yyerror(void);
 
 int lineno = 1;
 
+
 %}
 
 /*OPCIONES*/
@@ -201,7 +202,7 @@ int main1 (int argc, char *argv[]){
 /*Almacenar datos en tabla de simbolos - type 0(id) ,1(int), 2(float), 3(string)*/
 void cargar_simbolo(char *name, int type, char *val){
     FILE *pf, *pf_aux;
-	char strline[100], straux[100];
+	char strline[100], straux[100], subline[33], subaux[33],;
 	
 	if (fopen("ts.txt","r") == NULL){
 		pf = fopen("ts.txt", "wt");
@@ -231,7 +232,13 @@ void cargar_simbolo(char *name, int type, char *val){
 	//Leo toda la linea en busca de duplicados
     while(fgets(strline, 99, pf_aux) != NULL)
     {
-        if (strcmp(strline, straux) == 0)
+		strncpy(subline,strline,32);
+		subline[32] = '\0';
+
+		strncpy(subaux,straux,32);
+		subaux[32] = '\0';
+
+        if(strcmp(subline, subaux) == 0)
         {
             fclose(pf);
             fclose(pf_aux);
