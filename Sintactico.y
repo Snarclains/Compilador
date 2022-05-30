@@ -35,9 +35,6 @@ void actualizar_tipo(char*);
 char pi[1000];
 int pila[10];
 
-int p_pi = 0;
-int p_pila = 0;
-
 %}
 
 %left OP_SUM OP_RES

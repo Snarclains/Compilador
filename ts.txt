@@ -4,4 +4,3 @@ b                                |int       |                                |
 c                                |int       |                                |
 d                                |float     |                                |
 cadena                           |char      |                                |
-a                                |          |                                |

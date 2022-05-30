@@ -202,7 +202,7 @@ int main1 (int argc, char *argv[]){
 /*Almacenar datos en tabla de simbolos - type 0(id) ,1(int), 2(float), 3(string)*/
 void cargar_simbolo(char *name, int type, char *val){
     FILE *pf, *pf_aux;
-	char strline[100], straux[100], subline[33], subaux[33],;
+	char strline[100], straux[100], subline[33], subaux[33];
 	
 	if (fopen("ts.txt","r") == NULL){
 		pf = fopen("ts.txt", "wt");
