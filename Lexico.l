@@ -33,6 +33,21 @@ int lineno = 1;
 %option noyywrap  
 %option yylineno 
 
+/*CARACTERES*/
+DIGITO			[1-9]
+DIG_C_NUL		[0-9]		
+LETRA			[a-zA-Z]
+ESPACIO			[" "]
+INI_COM			"-/"
+FIN_COM			"/-"
+GUIONES			[-_]
+COMILLAS		["]
+CHAR_COMA		[","]
+CHAR_PUNTO		["."]
+CHAR_PUNCO		[";"]
+CHAR_DOSPU		[":"]
+CARACTER        [a-z,A-Z,0-9,=,>,<,!,:,+,\-,*,/,@,.,?]
+
 /*OPERADORES*/
 OP_ASIG		":="
 OP_SUM		"+"
@@ -57,21 +72,6 @@ PAR_A		"("
 PAR_C		")"
 COR_A		"["
 COR_C		"]"
-
-/*CARACTERES*/
-DIGITO			[1-9]
-DIG_C_NUL		[0-9]		
-LETRA			[a-zA-Z]
-ESPACIO			[" "]
-INI_COM			"-/"
-FIN_COM			"/-"
-GUIONES			[-_]
-COMILLAS		["]
-CHAR_COMA		[","]
-CHAR_PUNTO		["."]
-CHAR_PUNCO		[";"]
-CHAR_DOSPU		[":"]
-CARACTER        [a-z,A-Z,0-9,=,>,<,!,:,+,\-,*,/,@,.,?]
 
 /*DECLARACIONES*/
 CTE_INT			{DIG_C_NUL}+

@@ -13,12 +13,14 @@ char pi[1000];
 
 char a_comp[3];
 char b_comp[3];
+char ch_cont_avg[3];
 
 int pila[10];
 
 int yystopparser = 0;
 int p_pi = 0;
-int p_pila = 0;
+int p_pila = -1;
+int cont_avg = 0;
 int declarados = 0;
 
 int yyerror();
@@ -28,12 +30,8 @@ void generar_archivo_cod_inter();
 void generar_assembler();
 void insertar(char*);
 void apilar();
-void avanzar();
 void desapilar_insertar(int);
 void actualizar_tipo(char*);
-
-char pi[1000];
-int pila[10];
 
 %}
 
@@ -112,21 +110,23 @@ int pila[10];
 
 programa_completo: programa {generar_archivo_cod_inter(); generar_assembler(); printf("Sintactico --> Compilacion OK\n");}
 
-programa: sentencia | programa sentencia ; 
+programa: sentencia | programa sentencia; 
 
 sentencia:  asignacion | iteracion | seleccion | declaracion | entrada_salida;
 
 asignacion: ID {insertar("ID");} OP_ASIG expresion {insertar(":="); printf("Sintactico --> ASIGNACION\n");};
 
-iteracion:  WHILE {insertar("@salto_if"); apilar(); avanzar(); insertar(":="); apilar(); insertar("ET");} PAR_A condicion PAR_C {insertar("CMP"); insertar(a_comp); insertar("@salto_if");} LLA_A programa LLA_C	{insertar("BI"); desapilar_insertar(p_pi); desapilar_insertar(p_pi); printf("Sintactico --> WHILE\n");};
+iteracion:  WHILE {insertar("@salto_if"); apilar(); insertar(":="); apilar(); insertar("ET");}
+            PAR_A condicion PAR_C {insertar("CMP"); insertar(a_comp); insertar("@salto_if");}
+            LLA_A programa LLA_C {insertar("BI"); desapilar_insertar(p_pi); desapilar_insertar(p_pi); printf("Sintactico --> WHILE\n");};
 
-/*seleccion:  IF {insertar("@salto_if"); apilar(); avanzar(); insertar(":=");} PAR_A condicion PAR_C {insertar("CMP"); insertar(a_comp); insertar("@salto_if");} LLA_A programa LLA_C {desapilar_insertar(p_pi); printf("Sintactico --> IF\n");}
-            | IF {insertar("@salto_if"); apilar(); avanzar(); insertar(":=");} PAR_A condicion PAR_C {insertar("CMP"); insertar(a_comp); insertar("@salto_if");} LLA_A programa LLA_C ELSE {insertar("BI"); desapilar_insertar(p_pi+1); apilar(); avanzar();} LLA_A programa LLA_C {desapilar_insertar(p_pi); printf("Sintactico --> IF ELSE\n");};*/
-
-seleccion:  IF PAR_A condicion PAR_C LLA_A programa LLA_C {printf("Sintactico --> IF\n");}
-            | IF PAR_A condicion PAR_C LLA_A programa LLA_C ELSE LLA_A programa LLA_C {printf("Sintactico --> IF ELSE\n");};
+seleccion:  seleccion_aux {desapilar_insertar(p_pi); printf("Sintactico --> IF\n");}
+            | seleccion_aux ELSE {insertar("BI"); desapilar_insertar(p_pi+1); apilar();} 
+              LLA_A programa LLA_C {desapilar_insertar(p_pi); printf("Sintactico --> IF ELSE\n");};
+seleccion_aux:  IF {insertar("@salto_if"); apilar(); insertar(":=");} PAR_A condicion PAR_C {insertar("CMP"); insertar(a_comp); insertar("@salto_if");}
+                LLA_A programa LLA_C {};
 condicion:  condicion {insertar("CMP"); insertar(a_comp); insertar("@salto_if");} OP_AND comparacion {printf("Sintactico --> AND\n");}
-            | condicion {insertar("CMP"); insertar(b_comp); apilar(); avanzar();} OP_OR comparacion {desapilar_insertar(p_pi+4); printf("Sintactico --> OR\n");}
+            | condicion {insertar("CMP"); insertar(b_comp); apilar();} OP_OR comparacion {desapilar_insertar(p_pi+4); printf("Sintactico --> OR\n");}
             | comparacion;
 comparacion:  expresion comparador expresion
               | expresion_INLIST {strcpy(a_comp,"BNE"); strcpy(b_comp,"BEQ"); printf("Sintactico --> INLIST\n");};
@@ -149,11 +149,11 @@ entrada_salida: READ ID {printf("Sintactico --> READ ID\n");}
                 | WRITE ID {printf("Sintactico --> WRITE ID\n");}
                 | WRITE CTE_CHA {printf("Sintactico --> WRITE STR\n");};
 
-expresion_AVG:  AVG {insertar("@avg");} PAR_A COR_A lista_expresion_avg COR_C PAR_C {insertar("+"); insertar("@cont_avg"); insertar("/");};
-lista_expresion_avg:  lista_expresion_avg CHAR_COMA expresion {insertar("+"); insertar("@cont_avg"); insertar("@cont_avg"); insertar("1"); insertar("+"); insertar(":=");}
-                     | expresion {insertar("@cont_avg"); insertar("@cont_avg"); insertar("1"); insertar("+"); insertar(":=");};
+expresion_AVG:  AVG {insertar("@avg");} PAR_A COR_A lista_expresion_avg COR_C PAR_C {sprintf(ch_cont_avg,"%d",cont_avg); cont_avg=0; insertar(ch_cont_avg); insertar("/");};
+lista_expresion_avg:  lista_expresion_avg CHAR_COMA expresion {insertar("+"); cont_avg++;}
+                     | expresion {cont_avg++;};
 
-expresion_INLIST: INLIST {insertar("@salto_in"); apilar(); avanzar(); insertar(":=");} PAR_A ID {insertar("@aux_inlist"); insertar("ID"); insertar(":="); insertar("@aux_inlisted");} CHAR_PUNCO COR_A lista_expresion_inlist COR_C PAR_C {insertar("@aux_inlist"); insertar("@aux_inlisted");};
+expresion_INLIST: INLIST {insertar("@salto_in"); apilar(); insertar(":=");} PAR_A ID {insertar("@aux_inlist"); insertar("ID"); insertar(":="); insertar("@aux_inlisted");} CHAR_PUNCO COR_A lista_expresion_inlist COR_C PAR_C {insertar("@aux_inlist"); insertar("@aux_inlisted");};
 lista_expresion_inlist: lista_expresion_inlist CHAR_PUNCO {insertar("@aux_inlisted");} expresion {insertar(":="); insertar("CMP"); insertar("@salto_in");}
                         | expresion {insertar(":="); insertar("CMP"); insertar("BEQ"); insertar("@salto_in");};
 
@@ -165,7 +165,7 @@ termino:  termino OP_MUL factor {insertar("*"); printf("Sintactico --> MULTIPLIC
           | termino OP_DIV factor {insertar("/"); printf("Sintactico --> DIVISION\n");}
           | factor;
 factor: PAR_A expresion PAR_C 
-        | ID {insertar("ID");}
+        | ID      {insertar("ID");}
         | CTE_CHA {insertar("CTE_CHA");}
         | CTE_FLO {insertar("CTE_FLO");}
         | CTE_INT {insertar("CTE_INT");};
@@ -206,35 +206,36 @@ void generar_assembler(){
 
 //Inserta un elemento en la PI
 void insertar(char* elemento){
-  char aux[33];
+  strcat(pi,elemento);
+  strcat(pi,",");
 
-  strcat(aux,"elemento");
-  strcat(aux,",");
-
-  strcpy(&pi[p_pi],aux);
-  
-  p_pi = p_pi + strlen(elemento);
+  p_pi += strlen(&pi[p_pi]);
 }
 
-//Apila un numero de posicion de la PI
+//Apila un numero de posicion de la PI y avanza 1 posicion
 void apilar(){
-  p_pila++;
+  pila[++p_pila] = p_pi++;
 
-  pila[p_pila] = p_pi;
-}
-
-//Avanza una posicion en la PI
-void avanzar(){
-  p_pi++;
+  pi[p_pi++] = ',';
 }
 
 //Desapila e inserta en la posicion recibida de PI
 void desapilar_insertar(int p_polaca){
-  int aux = pila[p_pila];
+  int pos;
+  int aux_len;
 
+  char aux[4];
+  char pi_aux[1000];
+
+  pos = pila[p_pila];
   p_pila--;
 
-  pila[aux] = p_polaca;
+  strcpy(pi_aux,&pi[pos+1]);
+
+  aux_len=sprintf(aux,"%d",p_polaca);
+
+  strcpy(&pi[pos],aux);
+  strcpy(&pi[pos+aux_len],pi_aux);
 }
 
 //Inserta el type del ultimo ID registrado
