@@ -2,8 +2,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <string.h>
+#include <conio.h>
 #include <math.h>
 
 #include "y.tab.h"
@@ -18,13 +18,12 @@
 
 void cargar_simbolo(char*, int, char*);
 
-FILE  *yyin;
-int yylval;
-char *yyltext;
+FILE* yyin;
 
 int yyerror(void);
-
 int lineno = 1;
+
+char yytext_aux[33];
 
 
 %}
@@ -148,27 +147,37 @@ INLIST		"inlist"|"INLIST"|"Inlist"
                         printf( "Lexico --> El nombre del identificador supera la cantidad maxima de caracters permitidos. Cantidad: %d\n", LIMIT_ID);
                        	exit(1);
                     }
+				yylval = (int)strdup(yytext);
 				cargar_simbolo(yytext, 0, 0);
-				printf("Lexico --> Identificador: %s\n", yytext);return ID;}
+				printf("Lexico --> Identificador: %s\n", yytext); return ID;}
 
 {CTE_INT}		{if (atof(yytext) > LIMIT_INT_SUP || atof(yytext) < LIMIT_INT_INF){
                         printf( "Lexico --> El entero supera los limites permitidos.\n");
                         exit(1);
-					} 
+					}
+				strcpy(yytext_aux,"_");
+				strcpy(yytext_aux+1,yytext);
+				yylval = (int)strdup(yytext_aux);
 				cargar_simbolo(yytext, 1, yytext);
 				printf("Lexico --> Constante entera: %s\n", yytext); return CTE_INT;}
 
 {CTE_FLO}		{if (atof(yytext) > LIMIT_FLOAT_SUP || atof(yytext) < LIMIT_FLOAT_INF){
                         printf( "Lexico --> El real supera los limites permitidos. \n");
                         exit(1);
-					} 
-				cargar_simbolo(yytext, 2, yytext); 
+					}
+				strcpy(yytext_aux,"_");
+				strcpy(yytext_aux+1,yytext);
+				yylval = (int)strdup(yytext_aux);
+				cargar_simbolo(yytext, 2, yytext);
 				printf("Lexico --> Constante flotante: %s\n", yytext); return CTE_FLO;}
 
 {CTE_CHA}		{if (strlen(yytext) > LIMIT_STR){
                         printf( "Lexico --> El string ingresado supera la cantidad maxima permitida. Cantidad: %d\n", LIMIT_STR);
                        	exit(1); 
 					}
+				strcpy(yytext_aux,"_");
+				strcpy(yytext_aux+1,yytext);
+				yylval = (int)strdup(yytext_aux);
 				cargar_simbolo(yytext, 3, yytext);
 				printf("Lexico --> Constante char: %s\n", yytext); return CTE_CHA;}
 
@@ -200,9 +209,9 @@ int main1 (int argc, char *argv[]){
 }
 
 /*Almacenar datos en tabla de simbolos - type 0(id) ,1(int), 2(float), 3(string)*/
-void cargar_simbolo(char *name, int type, char *val){
-    FILE *pf, *pf_aux;
-	char strline[100], straux[100], subline[33], subaux[33];
+void cargar_simbolo(char* name, int type, char* val){
+  	FILE *pf, *pf_aux;
+	char strline[100], straux[100], valaux[33], subline[33], subaux[33];
 	
 	if (fopen("ts.txt","r") == NULL){
 		pf = fopen("ts.txt", "wt");
@@ -222,8 +231,9 @@ void cargar_simbolo(char *name, int type, char *val){
 			sprintf(straux, "_%-32s|%-10s|%-32s|\n", name, "float", val);
 			break;
 		case 3:
-			//strlen(val)-2 -> para eliminar comillas
-			sprintf(straux, "_%-32s|%-10s|%-32s|%-10d\n", name, "string", val, strlen(val)-2);
+			strcpy(valaux,val+1);
+      valaux[strlen(valaux)-1] = '\0';
+			sprintf(straux, "_%-32s|%-10s|%-32s|%-10d\n", name, "string", valaux, strlen(valaux));
 			break;
 	}
 
