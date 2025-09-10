@@ -1,6 +1,7 @@
 # Compilador
 						
 ## Grupo 2
+### Docente Daniel
 
 | Apellido | Dni | GCI | Temas Especiales | Lenguaje |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
@@ -26,15 +27,19 @@ Debes instalar lo siguiente
 
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
-1. Clone the repo
+1. Clonar repositorio
    ```sh
    git clone https://github.com/JuanCruzMonteros/Compilador.git
    ```
-2. Ejecutar el archivo (en caso de tener powershell)
+2. moverse al proyecto
+   ```sh
+   cd Compilador
+   ```
+3. Ejecutar el archivo (en caso de tener powershell)
    ```sh
    run.sh
    ```
-2. Ejecutar el archivo (en caso de no tener powershell)
+4. Ejecutar el archivo (en caso de no tener powershell)
    ```cmd  
 	run.bat
    ```

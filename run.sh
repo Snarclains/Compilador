@@ -1,6 +1,7 @@
 ## Script para Unix
 flex Lexico.l
 bison -dyv Sintactico.y
+rm ts.txt
 gcc lex.yy.c y.tab.c -o compilador
 ./compilador prueba.txt
 rm lex.yy.c
